@@ -5,50 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CH_LINGERIE</title>
     <style>
-        :root { --dark-pink: #d95988; --gold: #b89060; --soft-gray: #f9f9f9; }
+        :root { --dark-pink: #d95988; --gold: #b89060; --soft-gray: #f9f9f9; --instagram: #E1306C; --whatsapp: #25D366; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { margin: 0; padding: 0; background-color: #fff; }
+        body { margin: 0; padding: 0; background-color: #fff; padding-bottom: 30px; }
         
         header {
             background: #fff; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 1000;
         }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--dark-pink); letter-spacing: 1px; }
-        
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--dark-pink); }
         .cart-icon { position: relative; cursor: pointer; font-size: 1.5rem; background: none; border: none; }
-        .cart-count { 
-            position: absolute; top: 0; right: 0; background: var(--dark-pink); 
-            color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; 
-        }
+        .cart-count { position: absolute; top: 0; right: 0; background: var(--dark-pink); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; }
 
         .cart-sidebar {
-            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+            position: fixed; top: 0; right: -320px; width: 310px; height: 100%;
             background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); z-index: 2000;
             padding: 20px; overflow-y: auto;
         }
         .cart-sidebar.open { right: 0; }
 
-        .hero { height: 20vh; background: #fce4ec; display: flex; align-items: center; justify-content: center; margin-top: 60px; text-align: center; }
-        .hero h1 { color: #444; font-size: 1.8rem; }
-
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 30px 5%; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 30px 5%; margin-top: 70px; }
         .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 15px; border: 1px solid #eee; }
         .product-card img { width: 100%; height: 320px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
-        .product-card h3 { font-size: 1.1rem; margin: 10px 0; color: #333; }
         
-        .new-price { color: var(--dark-pink); font-size: 1.25rem; font-weight: bold; display: block; margin-bottom: 10px; }
-        .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1rem; }
-        .btn-add:hover { background: #b84a72; }
+        .new-price { color: var(--dark-pink); font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 10px; }
+        .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
 
         .order-section { margin-top: 20px; padding: 15px; background: #fff; border: 1px solid #ddd; border-radius: 10px; display: none; }
-        .btn-checkout { background: var(--gold); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
-        
-        .order-form { display: none; margin-top: 15px; }
         .order-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        .btn-whatsapp { background: #25D366; color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        .contact-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .contact-btn {
+            padding: 12px; border-radius: 25px; color: white; border: none;
+            font-weight: bold; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+        .bg-insta { background: var(--instagram); }
+        .bg-wa { background: var(--whatsapp); }
 
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .item-qty { background: var(--gold); color: white; padding: 2px 7px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .qty-badge { background: var(--gold); color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; margin-right: 5px; }
+        .remove-item { color: red; cursor: pointer; font-weight: bold; margin-right: 10px; background: none; border: none; }
     </style>
 </head>
 <body>
@@ -60,36 +56,39 @@
 
     <div class="cart-sidebar" id="cart-sidebar">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="margin:0;">سلة المشتريات</h3>
-            <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer; color:#888;">×</button>
+            <h3>سلة التسوق</h3>
+            <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer;">×</button>
         </div>
         <hr>
         <div id="cart-items"></div>
+        
         <div class="order-section" id="order-section">
-            <p style="font-size: 1.1rem;"><strong>الإجمالي:</strong> <span id="cart-total">0</span> دج</p>
-            <button class="btn-checkout" id="checkout-btn" onclick="openOrderForm()">إتمام الطلب</button>
-            
-            <div class="order-form" id="order-form">
+            <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> دج</p>
+            <div class="order-form">
                 <input type="text" id="cust-name" placeholder="الاسم الكامل">
-                <input type="text" id="cust-address" placeholder="العنوان والولاية">
+                <input type="text" id="cust-address" placeholder="العنوان (الولاية والبلدية)">
                 <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
-                <button class="btn-whatsapp" onclick="sendToWhatsApp()">تأكيد الطلب عبر واتساب ✅</button>
+                
+                <p style="font-size: 0.75rem; color: #666; margin: 5px 0;">عند الضغط، سيتم نسخ الطلب وتفتح المحادثة:</p>
+                <div class="contact-options">
+                    <button class="contact-btn bg-wa" onclick="processOrder('wa')">عبر واتساب</button>
+                    <button class="contact-btn bg-insta" onclick="processOrder('insta')">عبر انستغرام</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <section class="hero"><h1>مجموعتنا الجديدة 2026</h1></section>
     <div class="products-grid" id="grid"></div>
 
     <script>
-        // تذكري وضع رقم هاتفك الحقيقي هنا
-        const WHATSAPP_NUM = "213XXXXXXXXX"; 
+        const WHATSAPP_NUM = "213XXXXXXXXX"; // ضعي رقمك هنا
+        const INSTA_USER = "ch_lingerie20"; 
 
         const products = [
             { id: 1,  img: "1",  ar: "خمار موديل 1", price: 3500 },
             { id: 2,  img: "6",  ar: "خمار موديل 2", price: 2500 },
             { id: 3,  img: "9",  ar: "حجاب فلة",    price: 2500 },
-            { id: 4,  img: "10", ar: "بيجامة موديل 1", price: 2200 }, // كانت البيجامة الأولى
+            { id: 4,  img: "10", ar: "بيجامة موديل 1", price: 2200 },
             { id: 5,  img: "11", ar: "بيجامة موديل 2", price: 1000 },
             { id: 6,  img: "12", ar: "بيجامة موديل 3", price: 1000 },
             { id: 7,  img: "13", ar: "ROBE HIJAB",   price: 4200 },
@@ -103,7 +102,7 @@
             const grid = document.getElementById('grid');
             grid.innerHTML = products.map(p => `
                 <div class="product-card">
-                    <img src="${p.img}.jpg" alt="${p.ar}" onerror="this.src='https://via.placeholder.com/300x400?text=Image+Missing'">
+                    <img src="${p.img}.jpg" onerror="this.src='https://via.placeholder.com/300x400?text=CH'">
                     <h3>${p.ar}</h3>
                     <span class="new-price">${p.price} دج</span>
                     <button class="btn-add" onclick="addToCart(${p.id})">أضيفي للسلة</button>
@@ -121,47 +120,60 @@
             document.getElementById('cart-sidebar').classList.add('open');
         }
 
+        function removeItem(id) {
+            delete cart[id];
+            updateUI();
+        }
+
         function updateUI() {
             const list = document.getElementById('cart-items');
             const orderSection = document.getElementById('order-section');
-            let total = 0, count = 0;
+            let total = 0; let count = 0;
             list.innerHTML = '';
             
-            if (Object.keys(cart).length === 0) {
-                list.innerHTML = '<p style="text-align:center; color:#888; margin-top:20px;">السلة فارغة</p>';
-                orderSection.style.display = 'none';
-            } else {
-                orderSection.style.display = 'block';
-                for (let id in cart) {
-                    const item = cart[id];
-                    total += item.price * item.qty;
-                    count += item.qty;
-                    list.innerHTML += `
-                        <div class="cart-item">
-                            <div><strong>${item.ar}</strong> <span class="item-qty">×${item.qty}</span></div>
+            for (let id in cart) {
+                const item = cart[id];
+                total += (item.price * item.qty);
+                count += item.qty;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.ar}</strong> 
+                            <span class="qty-badge">×${item.qty}</span>
+                        </div>
+                        <div>
                             <span>${item.price * item.qty} دج</span>
-                        </div>`;
-                }
+                            <button class="remove-item" onclick="removeItem(${id})">×</button>
+                        </div>
+                    </div>`;
             }
+            
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
+            orderSection.style.display = count > 0 ? 'block' : 'none';
         }
 
-        function openOrderForm() {
-            document.getElementById('order-form').style.display = 'block';
-            document.getElementById('checkout-btn').style.display = 'none';
-        }
+        function processOrder(platform) {
+            const name = document.getElementById('cust-name').value;
+            const addr = document.getElementById('cust-address').value;
+            const phone = document.getElementById('cust-phone').value;
 
-        function sendToWhatsApp() {
-            const n = document.getElementById('cust-name').value;
-            const a = document.getElementById('cust-address').value;
-            const p = document.getElementById('cust-phone').value;
-            if(!n || !a || !p) return alert("يرجى ملء كافة البيانات");
+            if(!name || !addr || !phone) return alert("يرجى ملء البيانات أولاً.");
 
-            let msg = `طلب جديد من متجر CH_LINGERIE:\n\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 المنتجات:\n`;
-            for (let id in cart) msg += `- ${cart[id].ar} (عدد: ${cart[id].qty})\n`;
+            let msg = `طلب جديد من CH_LINGERIE:\n\n👤 الاسم: ${name}\n📍 العنوان: ${addr}\n📞 الهاتف: ${phone}\n\n📦 المنتجات:\n`;
+            for (let id in cart) {
+                msg += `- ${cart[id].ar} (الكمية: ${cart[id].qty})\n`;
+            }
             msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
-            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`);
+
+            if(platform === 'wa') {
+                window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
+            } else {
+                navigator.clipboard.writeText(msg).then(() => {
+                    alert("تم نسخ تفاصيل الطلب! عند فتح انستغرام، اضغط 'لصق' في الرسائل.");
+                    window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
+                });
+            }
         }
 
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
