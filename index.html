@@ -33,100 +33,64 @@
         
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 12px; border: 1px solid #eee; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .product-card img { width: 100%; height: 380px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
         
-        .product-card img { width: 100%; height: 380px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #ececec; }
-        
-        .price-box { margin: 10px 0; }
-        .old-price { text-decoration: line-through; color: #999; font-size: 0.9rem; margin: 0 5px; }
         .new-price { color: var(--dark-pink); font-size: 1.2rem; font-weight: bold; }
-        
         .btn-add { background: var(--dark-pink); color: white; border: none; padding: 10px; border-radius: 20px; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 10px; }
 
         footer { background: #222; color: #fff; text-align: center; padding: 20px; margin-top: 40px; }
-        .rtl { direction: rtl; } .ltr { direction: ltr; }
     </style>
 </head>
-<body class="rtl" id="body">
+<body>
 
     <header>
-        <div class="logo" id="logo-text">إيليغانس بوتيك</div>
-        <div class="lang-switcher">
-            <button class="lang-btn active" onclick="setLang('ar')">عربي</button>
-            <button class="lang-btn" onclick="setLang('fr')">FR</button>
-            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        <div class="logo">إيليغانس بوتيك</div>
+        <div>
+            <button class="lang-btn active">عربي</button>
         </div>
     </header>
 
     <section class="hero">
-        <h1 id="hero-title">مجموعتنا الجديدة 2026</h1>
-        <p id="hero-desc">أرقى الموديلات الجزائرية بأسعار تنافسية</p>
+        <h1>مجموعتنا الجديدة 2026</h1>
+        <p>أرقى الموديلات الجزائرية بأسعار تنافسية</p>
     </section>
 
     <section class="section">
-        <h2 class="section-title" id="coll-title">أحدث الموديلات</h2>
+        <h2 class="section-title">أحدث الموديلات</h2>
         <div class="products-grid" id="grid">
             </div>
     </section>
 
-    <footer><p id="footer-text">© 2026 إيليغانس بوتيك - جميع الحقوق محفوظة</p></footer>
+    <footer><p>© 2026 إيليغانس بوتيك - جميع الحقوق محفوظة</p></footer>
 
     <script>
+        // مصفوفة المنتجات بناءً على طلبك
         const products = [
-            { id: 1, ar: "خمار أنيق", fr: "Khimar Élégant", en: "Elegant Khimar", old: 8500, new: 6500 },
-            { id: 2, ar: "خمار ملكي", fr: "Khimar Royal", en: "Royal Khimar", old: 12000, new: 9500 },
-            { id: 3, ar: "خمار عصري", fr: "Khimar Moderne", en: "Modern Khimar", old: 7500, new: 5800 },
-            { id: 4, ar: "خمار شتوي", fr: "Khimar d'Hiver", en: "Winter Khimar", old: 14500, new: 11000 },
-            { id: 5, ar: "خمار ربيعي", fr: "Khimar de Printemps", en: "Spring Khimar", old: 5500, new: 4200 },
-            { id: 6, ar: "خمار حفلات", fr: "Khimar de Soirée", en: "Party Khimar", old: 16000, new: 13500 },
-            { id: 7, ar: "خمار بسيط", fr: "Khimar Simple", en: "Simple Khimar", old: 9000, new: 7200 },
-            { id: 8, ar: "طقم رياضي", fr: "Survêtement", en: "Tracksuit", old: 9000, new: 7500 },
-            { id: 9, ar: "حجاب فلة", fr: "Hijab Fella", en: "Fella Hijab", old: 11000, new: 8500 },
-            { id: 10, ar: "بيجاما", fr: "Pyjama", en: "Pyjamas", old: 3500, new: 2100 }
+            { id: 1, name: "خمار", price: "1200 دج" },
+            { id: 2, name: "خمار", price: "1200 دج" },
+            { id: 3, name: "خمار", price: "1200 دج" },
+            { id: 4, name: "خمار", price: "1200 دج" },
+            { id: 5, name: "خمار", price: "1200 دج" },
+            { id: 6, name: "خمار", price: "1200 دج" },
+            { id: 7, name: "خمار", price: "1200 دج" },
+            { id: 8, name: "خمار", price: "1200 دج" },
+            { id: 9, name: "حجاب فلة", price: "4500 دج" },
+            { id: 10, name: "بيجاما", price: "2800 دج" }
         ];
 
-        const translations = {
-            ar: { logo: "إيليغانس بوتيك", heroT: "مجموعتنا الجديدة 2026", heroD: "أرقى الموديلات الجزائرية بأسعار تنافسية", collT: "أحدث الموديلات", btn: "أضيفي للسلة", footer: "© 2026 إيليغانس بوتيك - جميع الحقوق محفوظة", curr: "دج", dir: "rtl" },
-            fr: { logo: "ELEGANCE", heroT: "Nouvelle Collection 2026", heroD: "Modèles premium aux meilleurs prix", collT: "Nouveautés", btn: "Ajouter au panier", footer: "© 2026 Tous droits réservés", curr: "DA", dir: "ltr" },
-            en: { logo: "ELEGANCE", heroT: "New Collection 2026", heroD: "Premium Algerian models at best prices", collT: "New Arrivals", btn: "Add to Cart", footer: "© 2026 All rights reserved", curr: "DA", dir: "ltr" }
-        };
-
-        let currentLang = 'ar';
-
-        function render() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            products.forEach(p => {
-                const name = p[currentLang];
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <img src="Images/${p.id}.jpg" alt="${name}">
-                        <h3>${name}</h3>
-                        <div class="price-box">
-                            <span class="old-price">${p.old} DA</span>
-                            <span class="new-price">${p.new} <small>${translations[currentLang].curr}</small></span>
-                        </div>
-                        <button class="btn-add">${translations[currentLang].btn}</button>
+        const grid = document.getElementById('grid');
+        products.forEach(p => {
+            grid.innerHTML += `
+                <div class="product-card">
+                    <img src="${p.id}.jpg" alt="${p.name}">
+                    <h3>${p.name}</h3>
+                    <div class="price-box">
+                        <span class="new-price">${p.price}</span>
                     </div>
-                `;
-            });
-        }
-
-        function setLang(lang) {
-            currentLang = lang;
-            const data = translations[lang];
-            document.getElementById('body').className = data.dir;
-            document.getElementById('logo-text').innerText = data.logo;
-            document.getElementById('hero-title').innerText = data.heroT;
-            document.getElementById('hero-desc').innerText = data.heroD;
-            document.getElementById('coll-title').innerText = data.collT;
-            document.getElementById('footer-text').innerText = data.footer;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            // إظهار الزر النشط
-            render();
-        }
-
-        render();
+                    <button class="btn-add">أضيفي للسلة</button>
+                </div>
+            `;
+        });
     </script>
 </body>
 </html>
