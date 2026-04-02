@@ -73,34 +73,28 @@
                 <input type="text" id="cust-name" placeholder="الاسم الكامل">
                 <input type="text" id="cust-address" placeholder="العنوان والولاية">
                 <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
-                <button class="btn-whatsapp" onclick="sendToWhatsApp()">
-                    تأكيد الطلب عبر واتساب ✅
-                </button>
+                <button class="btn-whatsapp" onclick="sendToWhatsApp()">تأكيد الطلب عبر واتساب ✅</button>
             </div>
         </div>
     </div>
 
-    <section class="hero">
-        <h1>مجموعتنا الجديدة 2026</h1>
-    </section>
-
+    <section class="hero"><h1>مجموعتنا الجديدة 2026</h1></section>
     <div class="products-grid" id="grid"></div>
 
     <script>
-        // تذكري وضع رقم هاتفك هنا بدلاً من XXXXXXXXX
+        // تذكري وضع رقم هاتفك الحقيقي هنا (مثلاً: 213555001122)
         const WHATSAPP_NUM = "213XXXXXXXXX"; 
 
         const products = [
             { id: 1,  img: "1",  ar: "خمار موديل 1", price: 3500 },
             { id: 2,  img: "6",  ar: "خمار موديل 2", price: 2500 },
             { id: 3,  img: "9",  ar: "حجاب فلة",    price: 2500 },
-            { id: 4,  img: "10", ar: "بيجامة",      price: 2200 },
-            // المنتجات الجديدة من 11 إلى 15
-            { id: 5,  img: "11", ar: "منتج موديل 11", price: 1000 },
-            { id: 6,  img: "12", ar: "منتج موديل 12", price: 1000 },
-            { id: 7,  img: "13", ar: "منتج موديل 13", price: 1000 },
-            { id: 8,  img: "14", ar: "منتج موديل 14", price: 1000 },
-            { id: 9,  img: "15", ar: "منتج موديل 15", price: 1000 }
+            { id: 4,  img: "10", ar: "بيجامة موديل 10", price: 2200 },
+            { id: 5,  img: "11", ar: "بيجامة موديل 11", price: 1000 },
+            { id: 6,  img: "12", ar: "بيجامة موديل 12", price: 1000 },
+            { id: 7,  img: "13", ar: "ROBE HIJAB",   price: 4200 },
+            { id: 8,  img: "14", ar: "بيجامة موديل 14", price: 1000 },
+            { id: 9,  img: "15", ar: "بيجامة موديل 15", price: 1000 }
         ];
 
         let cart = {};
@@ -118,9 +112,8 @@
         }
 
         function addToCart(id) {
-            if (cart[id]) {
-                cart[id].qty++;
-            } else {
+            if (cart[id]) cart[id].qty++;
+            else {
                 const p = products.find(i => i.id === id);
                 cart[id] = { ...p, qty: 1 };
             }
@@ -131,29 +124,24 @@
         function updateUI() {
             const list = document.getElementById('cart-items');
             const orderSection = document.getElementById('order-section');
-            let total = 0;
-            let count = 0;
+            let total = 0, count = 0;
             list.innerHTML = '';
             
-            const cartKeys = Object.keys(cart);
-            if (cartKeys.length === 0) {
-                list.innerHTML = '<p style="text-align:center; color:#888; margin-top:20px;">السلة فارغة حالياً</p>';
+            if (Object.keys(cart).length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#888; margin-top:20px;">السلة فارغة</p>';
                 orderSection.style.display = 'none';
             } else {
                 orderSection.style.display = 'block';
-                cartKeys.forEach(id => {
+                for (let id in cart) {
                     const item = cart[id];
                     total += item.price * item.qty;
                     count += item.qty;
                     list.innerHTML += `
                         <div class="cart-item">
-                            <div>
-                                <strong>${item.ar}</strong> 
-                                <span class="item-qty">×${item.qty}</span>
-                            </div>
+                            <div><strong>${item.ar}</strong> <span class="item-qty">×${item.qty}</span></div>
                             <span>${item.price * item.qty} دج</span>
                         </div>`;
-                });
+                }
             }
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
@@ -168,31 +156,15 @@
             const n = document.getElementById('cust-name').value;
             const a = document.getElementById('cust-address').value;
             const p = document.getElementById('cust-phone').value;
-            
-            if(!n || !a || !p) {
-                alert("يرجى ملء الاسم والعنوان ورقم الهاتف لإتمام الطلب.");
-                return;
-            }
+            if(!n || !a || !p) return alert("يرجى ملء كافة البيانات");
 
-            let msg = `طلب جديد من متجر CH_LINGERIE:\n\n`;
-            msg += `👤 الاسم: ${n}\n`;
-            msg += `📍 العنوان: ${a}\n`;
-            msg += `📞 الهاتف: ${p}\n\n`;
-            msg += `📦 المنتجات:\n`;
-            
-            for (let id in cart) {
-                msg += `- ${cart[id].ar} (عدد: ${cart[id].qty})\n`;
-            }
-            
+            let msg = `طلب جديد من متجر CH_LINGERIE:\n\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 المنتجات:\n`;
+            for (let id in cart) msg += `- ${cart[id].ar} (عدد: ${cart[id].qty})\n`;
             msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
-            
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`);
         }
 
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('open');
-        }
-
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
         render();
     </script>
 </body>
