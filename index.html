@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوتيك الأناقة | Elegance Boutique</title>
+    <style>
+        :root {
+            --main-pink: #f4cfdf;
+            --dark-pink: #d95988;
+            --gold: #b89060;
+            --soft-gray: #f9f9f9;
+        }
+
+        * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+        body { margin: 0; padding: 0; background-color: #fff; scroll-behavior: smooth; }
+
+        /* القائمة العلوية */
+        header {
+            background: #fff;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--dark-pink); }
+
+        .lang-switcher { display: flex; gap: 5px; }
+
+        .lang-btn {
+            background: #eee;
+            color: #333;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .lang-btn.active { background: var(--gold); color: white; }
+
+        /* القسم الرئيسي */
+        .hero {
+            height: 60vh;
+            background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), 
+                        url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        /* قسم المنتجات */
+        .section { padding: 40px 5%; }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: var(--gold); }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--soft-gray);
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px;
+            border: 1px solid #eee;
+        }
+
+        .product-card img { width: 100%; height: 350px; object-fit: cover; border-radius: 10px; }
+
+        .old-price { text-decoration: line-through; color: #999; font-size: 1rem; margin: 0 10px; display: inline-block; }
+        .new-price { color: var(--dark-pink); font-size: 1.4rem; font-weight: bold; display: inline-block; }
+
+        .btn-add {
+            background: var(--dark-pink);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        footer { background: #222; color: #fff; text-align: center; padding: 20px; margin-top: 40px; }
+
+        /* اتجاهات اللغات */
+        .rtl { direction: rtl; }
+        .ltr { direction: ltr; }
+    </style>
+</head>
+<body class="rtl" id="body">
+
+    <header>
+        <div class="logo" id="logo-text">إيليغانس بوتيك</div>
+        <div class="lang-switcher">
+            <button class="lang-btn active" onclick="setLang('ar')">عربي</button>
+            <button class="lang-btn" onclick="setLang('fr')">Français</button>
+            <button class="lang-btn" onclick="setLang('en')">English</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1 id="hero-title">أزياء نسائية حصرية</h1>
+        <p id="hero-desc">تألقي بأفضل التصاميم الجزائرية والعالمية</p>
+    </section>
+
+    <section id="collection" class="section">
+        <h2 class="section-title" id="coll-title">وصلنا حديثاً</h2>
+        <div class="products-grid">
+            
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500" alt="Dress">
+                <h3 class="p-name" 
+                    data-ar="فستان سهرة" 
+                    data-fr="Robe de Soirée" 
+                    data-en="Evening Dress">فستان سهرة</h3>
+                <div>
+                    <span class="old-price">8500 DA</span>
+                    <span class="new-price">6200 <span class="curr">دج</span></span>
+                </div>
+                <button class="btn-add" id="btn-1">أضيفي للسلة</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500" alt="Dress">
+                <h3 class="p-name" 
+                    data-ar="طقم عصري" 
+                    data-fr="Ensemble Moderne" 
+                    data-en="Modern Set">طقم عصري</h3>
+                <div>
+                    <span class="old-price">12000 DA</span>
+                    <span class="new-price">9500 <span class="curr">دج</span></span>
+                </div>
+                <button class="btn-add" id="btn-2">أضيفي للسلة</button>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p id="footer-text">© 2026 جميع الحقوق محفوظة لـ إيليغانس بوتيك</p>
+    </footer>
+
+    <script>
+        const translations = {
+            ar: {
+                logo: "إيليغانس بوتيك",
+                heroT: "أزياء نسائية حصرية",
+                heroD: "تألقي بأفضل التصاميم الجزائرية والعالمية",
+                collT: "وصلنا حديثاً",
+                btn: "أضيفي للسلة",
+                footer: "© 2026 جميع الحقوق محفوظة لـ إيليغانس بوتيك",
+                curr: "دج",
+                dir: "rtl"
+            },
+            fr: {
+                logo: "ELEGANCE BOUTIQUE",
+                heroT: "Mode Féminine Exclusive",
+                heroD: "Brillez avec les meilleurs designs algériens et mondiaux",
+                collT: "Nouveautés",
+                btn: "Ajouter au panier",
+                footer: "© 2026 Tous droits réservés - Elegance Boutique",
+                curr: "DA",
+                dir: "ltr"
+            },
+            en: {
+                logo: "ELEGANCE BOUTIQUE",
+                heroT: "Exclusive Women's Fashion",
+                heroD: "Shine with the best Algerian and global designs",
+                collT: "New Arrivals",
+                btn: "Add to Cart",
+                footer: "© 2026 All rights reserved - Elegance Boutique",
+                curr: "DA",
+                dir: "ltr"
+            }
+        };
+
+        function setLang(lang) {
+            const body = document.getElementById('body');
+            const data = translations[lang];
+
+            // تغيير الاتجاه والنصوص الرئيسية
+            body.className = data.dir;
+            document.getElementById('logo-text').innerText = data.logo;
+            document.getElementById('hero-title').innerText = data.heroT;
+            document.getElementById('hero-desc').innerText = data.heroD;
+            document.getElementById('coll-title').innerText = data.collT;
+            document.getElementById('footer-text').innerText = data.footer;
+
+            // تغيير نصوص المنتجات
+            document.querySelectorAll('.p-name').forEach(p => {
+                p.innerText = p.getAttribute('data-' + lang);
+            });
+
+            // تغيير العملة والأزرار
+            document.querySelectorAll('.curr').forEach(c => c.innerText = data.curr);
+            document.querySelectorAll('.btn-add').forEach(b => b.innerText = data.btn);
+
+            // تحديث حالة الأزرار
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.toLowerCase().includes(lang) || (lang==='ar' && btn.innerText==='عربي')) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
