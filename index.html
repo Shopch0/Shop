@@ -11,97 +11,42 @@
             --gold: #b89060;
             --soft-gray: #f9f9f9;
         }
-
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
-
         body { margin: 0; padding: 0; background-color: #fff; scroll-behavior: smooth; }
-
-        /* القائمة العلوية */
+        
         header {
-            background: #fff;
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            z-index: 1000;
+            background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; width: 100%; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 1000;
         }
-
         .logo { font-size: 1.5rem; font-weight: bold; color: var(--dark-pink); }
-
-        .lang-switcher { display: flex; gap: 5px; }
-
-        .lang-btn {
-            background: #eee;
-            color: #333;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
+        .lang-btn { background: #eee; border: none; padding: 6px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-left: 5px; }
         .lang-btn.active { background: var(--gold); color: white; }
 
-        /* القسم الرئيسي */
         .hero {
-            height: 60vh;
-            background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), 
-                        url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            margin-top: 60px;
+            height: 40vh; background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), 
+            url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000');
+            background-size: cover; background-position: center; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; margin-top: 60px;
         }
 
-        /* قسم المنتجات */
         .section { padding: 40px 5%; }
-        .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: var(--gold); }
+        .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 40px; color: var(--gold); border-bottom: 2px solid var(--main-pink); display: inline-block; width: 100%; padding-bottom: 10px; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 15px; border: 1px solid #eee; position: relative; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); background: #fff; }
+        
+        .product-card img { width: 100%; height: 350px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
+        
+        .price-box { margin: 10px 0; }
+        .old-price { text-decoration: line-through; color: #999; font-size: 0.9rem; margin: 0 8px; }
+        .new-price { color: var(--dark-pink); font-size: 1.3rem; font-weight: bold; }
+        
+        .btn-add { background: var(--dark-pink); color: white; border: none; padding: 10px; border-radius: 25px; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 10px; }
+        .btn-add:hover { background: #b0436a; }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .product-card {
-            background: var(--soft-gray);
-            padding: 20px;
-            text-align: center;
-            border-radius: 15px;
-            border: 1px solid #eee;
-        }
-
-        .product-card img { width: 100%; height: 350px; object-fit: cover; border-radius: 10px; }
-
-        .old-price { text-decoration: line-through; color: #999; font-size: 1rem; margin: 0 10px; display: inline-block; }
-        .new-price { color: var(--dark-pink); font-size: 1.4rem; font-weight: bold; display: inline-block; }
-
-        .btn-add {
-            background: var(--dark-pink);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-            font-size: 1rem;
-        }
-
-        footer { background: #222; color: #fff; text-align: center; padding: 20px; margin-top: 40px; }
-
-        /* اتجاهات اللغات */
-        .rtl { direction: rtl; }
-        .ltr { direction: ltr; }
+        footer { background: #222; color: #fff; text-align: center; padding: 30px; margin-top: 50px; }
+        .rtl { direction: rtl; } .ltr { direction: ltr; }
     </style>
 </head>
 <body class="rtl" id="body">
@@ -110,116 +55,84 @@
         <div class="logo" id="logo-text">إيليغانس بوتيك</div>
         <div class="lang-switcher">
             <button class="lang-btn active" onclick="setLang('ar')">عربي</button>
-            <button class="lang-btn" onclick="setLang('fr')">Français</button>
-            <button class="lang-btn" onclick="setLang('en')">English</button>
+            <button class="lang-btn" onclick="setLang('fr')">FR</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
         </div>
     </header>
 
     <section class="hero">
-        <h1 id="hero-title">أزياء نسائية حصرية</h1>
-        <p id="hero-desc">تألقي بأفضل التصاميم الجزائرية والعالمية</p>
+        <h1 id="hero-title">مجموعتنا الجديدة 2026</h1>
+        <p id="hero-desc">أرقى الملابس النسائية بجودة عالية وأسعار تنافسية</p>
     </section>
 
-    <section id="collection" class="section">
-        <h2 class="section-title" id="coll-title">وصلنا حديثاً</h2>
-        <div class="products-grid">
-            
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500" alt="Dress">
-                <h3 class="p-name" 
-                    data-ar="فستان سهرة" 
-                    data-fr="Robe de Soirée" 
-                    data-en="Evening Dress">فستان سهرة</h3>
-                <div>
-                    <span class="old-price">8500 DA</span>
-                    <span class="new-price">6200 <span class="curr">دج</span></span>
-                </div>
-                <button class="btn-add" id="btn-1">أضيفي للسلة</button>
+    <section class="section">
+        <h2 class="section-title" id="coll-title">تسوقي الآن</h2>
+        <div class="products-grid" id="grid">
             </div>
-
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500" alt="Dress">
-                <h3 class="p-name" 
-                    data-ar="طقم عصري" 
-                    data-fr="Ensemble Moderne" 
-                    data-en="Modern Set">طقم عصري</h3>
-                <div>
-                    <span class="old-price">12000 DA</span>
-                    <span class="new-price">9500 <span class="curr">دج</span></span>
-                </div>
-                <button class="btn-add" id="btn-2">أضيفي للسلة</button>
-            </div>
-
-        </div>
     </section>
 
-    <footer>
-        <p id="footer-text">© 2026 جميع الحقوق محفوظة لـ إيليغانس بوتيك</p>
-    </footer>
+    <footer><p id="footer-text">© 2026 جميع الحقوق محفوظة لـ إيليغانس بوتيك - الجزائر</p></footer>
 
     <script>
+        // مصفوفة المنتجات (يمكنك تعديل الأسعار هنا)
+        const products = [
+            { id: 1, nameAr: "فستان ربيعي", nameFr: "Robe de Printemps", nameEn: "Spring Dress", old: 7500, new: 5900 },
+            { id: 2, nameAr: "طقم كلاسيك", nameFr: "Ensemble Classique", nameEn: "Classic Set", old: 11000, new: 8500 },
+            { id: 3, nameAr: "عباية عصرية", nameFr: "Abaya Moderne", nameEn: "Modern Abaya", old: 9500, new: 7200 },
+            { id: 4, nameAr: "جاكيت شتوي", nameFr: "Veste d'Hiver", nameEn: "Winter Jacket", old: 14000, new: 11500 },
+            { id: 5, nameAr: "بلوزة أنيقة", nameFr: "Blouse Élégante", nameEn: "Elegant Blouse", old: 4500, new: 3200 },
+            { id: 6, nameAr: "فستان سهرة", nameFr: "Robe de Soirée", nameEn: "Evening Dress", old: 18000, new: 15500 },
+            { id: 7, nameAr: "سروال جينز", nameFr: "Pantalon Jean", nameEn: "Jean Pants", old: 5500, new: 4200 },
+            { id: 8, nameAr: "قميص رسمي", nameFr: "Chemise Formelle", nameEn: "Formal Shirt", old: 6000, new: 4800 },
+            { id: 9, nameAr: "طقم رياضي", nameFr: "Survêtement", nameEn: "Tracksuit", old: 9000, new: 7500 },
+            { id: 10, nameAr: "وشاح فاخر", nameFr: "Foulard de Luxe", nameEn: "Luxury Scarf", old: 3500, new: 2100 }
+        ];
+
         const translations = {
-            ar: {
-                logo: "إيليغانس بوتيك",
-                heroT: "أزياء نسائية حصرية",
-                heroD: "تألقي بأفضل التصاميم الجزائرية والعالمية",
-                collT: "وصلنا حديثاً",
-                btn: "أضيفي للسلة",
-                footer: "© 2026 جميع الحقوق محفوظة لـ إيليغانس بوتيك",
-                curr: "دج",
-                dir: "rtl"
-            },
-            fr: {
-                logo: "ELEGANCE BOUTIQUE",
-                heroT: "Mode Féminine Exclusive",
-                heroD: "Brillez avec les meilleurs designs algériens et mondiaux",
-                collT: "Nouveautés",
-                btn: "Ajouter au panier",
-                footer: "© 2026 Tous droits réservés - Elegance Boutique",
-                curr: "DA",
-                dir: "ltr"
-            },
-            en: {
-                logo: "ELEGANCE BOUTIQUE",
-                heroT: "Exclusive Women's Fashion",
-                heroD: "Shine with the best Algerian and global designs",
-                collT: "New Arrivals",
-                btn: "Add to Cart",
-                footer: "© 2026 All rights reserved - Elegance Boutique",
-                curr: "DA",
-                dir: "ltr"
-            }
+            ar: { logo: "إيليغانس بوتيك", heroT: "مجموعتنا الجديدة 2026", heroD: "أرقى الملابس النسائية بجودة عالية وأسعار تنافسية", collT: "تسوقي الآن", btn: "أضيفي للسلة", footer: "© 2026 جميع الحقوق محفوظة لـ إيليغانس بوتيك - الجزائر", curr: "دج", dir: "rtl" },
+            fr: { logo: "ELEGANCE", heroT: "Nouvelle Collection 2026", heroD: "Mode féminine de haute qualité aux meilleurs prix", collT: "Achetez Maintenant", btn: "Ajouter au panier", footer: "© 2026 Tous droits réservés - Algérie", curr: "DA", dir: "ltr" },
+            en: { logo: "ELEGANCE", heroT: "New Collection 2026", heroD: "High quality women's fashion at best prices", collT: "Shop Now", btn: "Add to Cart", footer: "© 2026 All rights reserved - Algeria", curr: "DA", dir: "ltr" }
         };
 
-        function setLang(lang) {
-            const body = document.getElementById('body');
-            const data = translations[lang];
+        let currentLang = 'ar';
 
-            // تغيير الاتجاه والنصوص الرئيسية
-            body.className = data.dir;
+        function renderProducts() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            products.forEach(p => {
+                const name = currentLang === 'ar' ? p.nameAr : (currentLang === 'fr' ? p.nameFr : p.nameEn);
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.id}.jpg" alt="${name}">
+                        <h3>${name}</h3>
+                        <div class="price-box">
+                            <span class="old-price">${p.old} DA</span>
+                            <span class="new-price">${p.new} <small class="curr">${translations[currentLang].curr}</small></span>
+                        </div>
+                        <button class="btn-add">${translations[currentLang].btn}</button>
+                    </div>
+                `;
+            });
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            const data = translations[lang];
+            document.getElementById('body').className = data.dir;
             document.getElementById('logo-text').innerText = data.logo;
             document.getElementById('hero-title').innerText = data.heroT;
             document.getElementById('hero-desc').innerText = data.heroD;
             document.getElementById('coll-title').innerText = data.collT;
             document.getElementById('footer-text').innerText = data.footer;
-
-            // تغيير نصوص المنتجات
-            document.querySelectorAll('.p-name').forEach(p => {
-                p.innerText = p.getAttribute('data-' + lang);
-            });
-
-            // تغيير العملة والأزرار
-            document.querySelectorAll('.curr').forEach(c => c.innerText = data.curr);
-            document.querySelectorAll('.btn-add').forEach(b => b.innerText = data.btn);
-
-            // تحديث حالة الأزرار
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.innerText.toLowerCase().includes(lang) || (lang==='ar' && btn.innerText==='عربي')) {
-                    btn.classList.add('active');
-                }
-            });
+            
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            renderProducts();
         }
+
+        // تشغيل المتجر عند التحميل
+        renderProducts();
     </script>
 </body>
 </html>
