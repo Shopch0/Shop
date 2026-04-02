@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إيليغانس بوتيك | Elegance Boutique</title>
+    <title>CH_LINGERIE</title>
     <style>
         :root { --dark-pink: #d95988; --gold: #b89060; --soft-gray: #f9f9f9; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
@@ -12,7 +12,7 @@
             background: #fff; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 1000;
         }
-        .logo { font-size: 1.3rem; font-weight: bold; color: var(--dark-pink); }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--dark-pink); letter-spacing: 1px; }
         .cart-icon { position: relative; cursor: pointer; font-size: 1.5rem; background: none; border: none; }
         .cart-count { 
             position: absolute; top: 0; right: 0; background: var(--dark-pink); 
@@ -42,7 +42,7 @@
 <body>
 
     <header>
-        <div class="logo">إيليغانس بوتيك</div>
+        <div class="logo">CH_LINGERIE</div>
         <button class="cart-icon" onclick="toggleCart()">🛒 <span class="cart-count" id="cart-count">0</span></button>
     </header>
 
@@ -69,12 +69,14 @@
     <div class="products-grid" id="grid"></div>
 
     <script>
-        const WHATSAPP_NUM = "213XXXXXXXXX"; // استبدلي الرقم هنا
+        // تذكري وضع رقم هاتفك هنا بدقة (مثال: 213777889900)
+        const WHATSAPP_NUM = "213XXXXXXXXX"; 
+
         const products = [
             { id: 1, ar: "خمار موديل 1", price: 3500 },
             { id: 2, ar: "خمار موديل 2", price: 2500 },
-            { id: 3, ar: "حجاب فلة", price: 2500 },
-            { id: 4, ar: "بيجامة", price: 2200 }
+            { id: 9, ar: "حجاب فلة", price: 2500 },
+            { id: 10, ar: "بيجامة", price: 2200 }
         ];
 
         let cart = {};
@@ -135,9 +137,9 @@
             const n = document.getElementById('cust-name').value;
             const a = document.getElementById('cust-address').value;
             const p = document.getElementById('cust-phone').value;
-            if(!n || !a || !p) return alert("يرجى ملء البيانات");
+            if(!n || !a || !p) return alert("يرجى ملء كافة البيانات");
 
-            let msg = `طلب جديد:\nالاسم: ${n}\nالعنوان: ${a}\nالهاتف: ${p}\n\nالمنتجات:\n`;
+            let msg = `طلب جديد من متجر CH_LINGERIE:\n\nالاسم: ${n}\nالعنوان: ${a}\nالهاتف: ${p}\n\nالمنتجات:\n`;
             for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
             msg += `\nالإجمالي: ${document.getElementById('cart-total').innerText} دج`;
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`);
