@@ -69,14 +69,14 @@
     <div class="products-grid" id="grid"></div>
 
     <script>
-        // تذكري وضع رقم هاتفك هنا بدقة (مثال: 213777889900)
+        // تذكري وضع رقم هاتفك هنا بدقة
         const WHATSAPP_NUM = "213XXXXXXXXX"; 
 
         const products = [
-            { id: 1, ar: "خمار موديل 1", price: 3500 },
-            { id: 2, ar: "خمار موديل 2", price: 2500 },
-            { id: 9, ar: "حجاب فلة", price: 2500 },
-            { id: 10, ar: "بيجامة", price: 2200 }
+            { id: 1, img: "1", ar: "خمار موديل 1", price: 3500 },
+            { id: 2, img: "6", ar: "خمار موديل 2", price: 2500 }, // الصورة 6 للموديل 2
+            { id: 3, img: "9", ar: "حجاب فلة", price: 2500 },     // الصورة 9 للحجاب
+            { id: 4, img: "10", ar: "بيجامة", price: 2200 }      // الصورة 10 للبيجامة
         ];
 
         let cart = {};
@@ -85,7 +85,7 @@
             const grid = document.getElementById('grid');
             grid.innerHTML = products.map(p => `
                 <div class="product-card">
-                    <img src="${p.id}.jpg" alt="${p.ar}">
+                    <img src="${p.img}.jpg" alt="${p.ar}">
                     <h3>${p.ar}</h3>
                     <span class="new-price">${p.price} دج</span>
                     <button class="btn-add" onclick="addToCart(${p.id})">أضيفي للسلة</button>
