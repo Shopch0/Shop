@@ -45,9 +45,9 @@
         
         .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
         
-        /* استمارة الطلب وزر الإتمام */
-        .order-section { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px; }
-        .btn-checkout { background: var(--gold); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 10px; }
+        /* قسم الطلب والإتمام */
+        .order-section { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px; display: none; } /* مخفي افتراضياً */
+        .btn-checkout { background: var(--gold); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
         
         .order-form { display: none; margin-top: 15px; }
         .order-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; }
@@ -55,6 +55,7 @@
 
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
         .item-qty { background: var(--gold); color: white; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin: 0 5px; }
+        .empty-msg { text-align: center; color: #888; margin-top: 50px; }
         
         .ltr { direction: ltr; } .rtl { direction: rtl; }
     </style>
@@ -80,10 +81,13 @@
             <button class="close-cart" onclick="toggleCart()">×</button>
         </div>
         <hr>
-        <div id="cart-items"></div>
+        
+        <div id="cart-items">
+            <p class="empty-msg">السلة فارغة حالياً</p>
+        </div>
         
         <div class="order-section" id="order-section">
-            <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> <span class="curr">دج</span></p>
+            <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> <span>دج</span></p>
             <button class="btn-checkout" id="checkout-btn" onclick="openOrderForm()">إتمام الطلب</button>
             
             <div class="order-form" id="order-form">
@@ -104,7 +108,7 @@
     </section>
 
     <script>
-        // ضعي رقم هاتفك هنا (مثال: 213555112233)
+        // تذكري وضع رقمك هنا
         const WHATSAPP_NUM = "213XXXXXXXXX"; 
 
         const products = [
@@ -147,27 +151,40 @@
                 cart[id] = { ...p, qty: 1 };
             }
             updateUI();
+            // فتح السلة تلقائياً عند الإضافة لتنبيه الزبونة
+            document.getElementById('cart-sidebar').classList.add('open');
         }
 
         function updateUI() {
             const list = document.getElementById('cart-items');
-            list.innerHTML = '';
+            const orderSection = document.getElementById('order-section');
             let total = 0, count = 0;
-            for (let id in cart) {
-                const item = cart[id];
-                total += item.price * item.qty;
-                count += item.qty;
-                list.innerHTML += `<div class="cart-item">
-                    <div><strong>${item[currentLang]}</strong> <span class="item-qty">×${item.qty}</span></div>
-                    <span>${item.price * item.qty} دج</span>
-                </div>`;
+            
+            list.innerHTML = '';
+            
+            const cartKeys = Object.keys(cart);
+            
+            if (cartKeys.length === 0) {
+                list.innerHTML = '<p class="empty-msg">السلة فارغة حالياً</p>';
+                orderSection.style.display = 'none'; // إخفاء قسم الإتمام
+            } else {
+                orderSection.style.display = 'block'; // إظهار قسم الإتمام
+                cartKeys.forEach(id => {
+                    const item = cart[id];
+                    total += item.price * item.qty;
+                    count += item.qty;
+                    list.innerHTML += `<div class="cart-item">
+                        <div><strong>${item[currentLang]}</strong> <span class="item-qty">×${item.qty}</span></div>
+                        <span>${item.price * item.qty} دج</span>
+                    </div>`;
+                });
             }
+            
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
         }
 
         function openOrderForm() {
-            if (Object.keys(cart).length === 0) return alert("السلة فارغة!");
             document.getElementById('order-form').style.display = 'block';
             document.getElementById('checkout-btn').style.display = 'none';
         }
@@ -179,14 +196,21 @@
             if(!n || !a || !p) return alert("يرجى ملء البيانات");
 
             let msg = `طلب جديد:\nالاسم: ${n}\nالعنوان: ${a}\nالهاتف: ${p}\n\nالمنتجات:\n`;
-            for (let id in cart) msg += `- ${cart[id][currentLang]} (الكمية: ${cart[id].qty})\n`;
+            for (let id in cart) msg += `- ${cart[id][currentLang]} (×${cart[id].qty})\n`;
             msg += `\nالإجمالي: ${document.getElementById('cart-total').innerText} دج`;
 
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`);
         }
 
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
-        function setLang(l) { currentLang = l; render(); updateUI(); }
+        function setLang(l) { 
+            currentLang = l; 
+            document.getElementById('btn-ar').classList.toggle('active', l === 'ar');
+            document.getElementById('btn-fr').classList.toggle('active', l === 'fr');
+            render(); 
+            updateUI(); 
+        }
+        
         render();
     </script>
 </body>
