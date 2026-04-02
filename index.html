@@ -13,7 +13,6 @@
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { margin: 0; padding: 0; background-color: #fff; scroll-behavior: smooth; }
         
-        /* الهيدر */
         header {
             background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 1000;
@@ -22,7 +21,6 @@
         .lang-btn { background: #eee; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: bold; margin-left: 5px; }
         .lang-btn.active { background: var(--gold); color: white; }
 
-        /* القسم الرئيسي */
         .hero {
             height: 35vh; background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), 
             url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000');
@@ -33,7 +31,6 @@
         .section { padding: 30px 5%; }
         .section-title { text-align: center; font-size: 2rem; margin-bottom: 30px; color: var(--gold); }
         
-        /* شبكة المنتجات */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 12px; border: 1px solid #eee; }
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
@@ -75,23 +72,22 @@
     <footer><p id="footer-text">© 2026 إيليغانس بوتيك - جميع الحقوق محفوظة</p></footer>
 
     <script>
-        // مصفوفة المنتجات: الصور من 1 إلى 10
         const products = [
-            { id: 1, ar: "موديل 01", fr: "Modèle 01", en: "Model 01", old: 8500, new: 6500 },
-            { id: 2, ar: "موديل 02", fr: "Modèle 02", en: "Model 02", old: 12000, new: 9500 },
-            { id: 3, ar: "موديل 03", fr: "Modèle 03", en: "Model 03", old: 7500, new: 5800 },
-            { id: 4, ar: "موديل 04", fr: "Modèle 04", en: "Model 04", old: 14500, new: 11000 },
-            { id: 5, ar: "موديل 05", fr: "Modèle 05", en: "Model 05", old: 5500, new: 4200 },
-            { id: 6, ar: "موديل 06", fr: "Modèle 06", en: "Model 06", old: 16000, new: 13500 },
-            { id: 7, ar: "موديل 07", fr: "Modèle 07", en: "Model 07", old: 9000, new: 7200 },
-            { id: 8, ar: "موديل 08", fr: "Modèle 08", en: "Model 08", old: 6800, new: 5400 },
-            { id: 9, ar: "موديل 09", fr: "Modèle 09", en: "Model 09", old: 11000, new: 8900 },
-            { id: 10, ar: "موديل 10", fr: "Modèle 10", en: "Model 10", old: 4000, new: 2900 }
+            { id: 1, ar: "خمار أنيق", fr: "Khimar Élégant", en: "Elegant Khimar", old: 8500, new: 6500 },
+            { id: 2, ar: "خمار ملكي", fr: "Khimar Royal", en: "Royal Khimar", old: 12000, new: 9500 },
+            { id: 3, ar: "خمار عصري", fr: "Khimar Moderne", en: "Modern Khimar", old: 7500, new: 5800 },
+            { id: 4, ar: "خمار شتوي", fr: "Khimar d'Hiver", en: "Winter Khimar", old: 14500, new: 11000 },
+            { id: 5, ar: "خمار ربيعي", fr: "Khimar de Printemps", en: "Spring Khimar", old: 5500, new: 4200 },
+            { id: 6, ar: "خمار حفلات", fr: "Khimar de Soirée", en: "Party Khimar", old: 16000, new: 13500 },
+            { id: 7, ar: "خمار بسيط", fr: "Khimar Simple", en: "Simple Khimar", old: 9000, new: 7200 },
+            { id: 8, ar: "طقم رياضي", fr: "Survêtement", en: "Tracksuit", old: 9000, new: 7500 },
+            { id: 9, ar: "حجاب فلة", fr: "Hijab Fella", en: "Fella Hijab", old: 11000, new: 8500 },
+            { id: 10, ar: "بيجاما", fr: "Pyjama", en: "Pyjamas", old: 3500, new: 2100 }
         ];
 
         const translations = {
             ar: { logo: "إيليغانس بوتيك", heroT: "مجموعتنا الجديدة 2026", heroD: "أرقى الموديلات الجزائرية بأسعار تنافسية", collT: "أحدث الموديلات", btn: "أضيفي للسلة", footer: "© 2026 إيليغانس بوتيك - جميع الحقوق محفوظة", curr: "دج", dir: "rtl" },
-            fr: { logo: "ELEGANCE", heroT: "Nouvelle Collection 2026", heroD: "Les meilleurs modèles aux meilleurs prix", collT: "Nouveautés", btn: "Ajouter au panier", footer: "© 2026 Tous droits réservés", curr: "DA", dir: "ltr" },
+            fr: { logo: "ELEGANCE", heroT: "Nouvelle Collection 2026", heroD: "Modèles premium aux meilleurs prix", collT: "Nouveautés", btn: "Ajouter au panier", footer: "© 2026 Tous droits réservés", curr: "DA", dir: "ltr" },
             en: { logo: "ELEGANCE", heroT: "New Collection 2026", heroD: "Premium Algerian models at best prices", collT: "New Arrivals", btn: "Add to Cart", footer: "© 2026 All rights reserved", curr: "DA", dir: "ltr" }
         };
 
@@ -104,7 +100,7 @@
                 const name = p[currentLang];
                 grid.innerHTML += `
                     <div class="product-card">
-                        <img src="${p.id}.jpg" alt="${name}">
+                        <img src="Images/${p.id}.jpg" alt="${name}">
                         <h3>${name}</h3>
                         <div class="price-box">
                             <span class="old-price">${p.old} DA</span>
@@ -126,7 +122,7 @@
             document.getElementById('coll-title').innerText = data.collT;
             document.getElementById('footer-text').innerText = data.footer;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+            // إظهار الزر النشط
             render();
         }
 
