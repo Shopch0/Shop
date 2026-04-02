@@ -8,140 +8,87 @@
         :root { --dark-pink: #d95988; --gold: #b89060; --soft-gray: #f9f9f9; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { margin: 0; padding: 0; background-color: #fff; }
-        
         header {
             background: #fff; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 1000;
         }
         .logo { font-size: 1.3rem; font-weight: bold; color: var(--dark-pink); }
-        .nav-tools { display: flex; align-items: center; gap: 15px; }
-        .lang-btn { background: #eee; border: none; padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
-        .lang-btn.active { background: var(--gold); color: white; }
-
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.5rem; background: none; border: none; padding: 5px; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.5rem; background: none; border: none; }
         .cart-count { 
             position: absolute; top: 0; right: 0; background: var(--dark-pink); 
             color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; 
         }
-
         .cart-sidebar {
             position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
             background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); z-index: 2000;
             padding: 20px; overflow-y: auto;
         }
         .cart-sidebar.open { right: 0; }
-        .close-cart { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--dark-pink); }
-
-        .hero { height: 25vh; background: #fce4ec; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; }
-        .section { padding: 30px 5%; }
-        
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .hero { height: 20vh; background: #fce4ec; display: flex; align-items: center; justify-content: center; margin-top: 60px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 30px 5%; }
         .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 15px; border: 1px solid #eee; }
-        .product-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
-        
-        .price-info { margin: 10px 0; font-size: 0.95rem; }
-        .stock-label { color: #666; font-size: 0.85rem; display: block; margin-top: 5px; }
-        .new-price { color: var(--dark-pink); font-size: 1.2rem; font-weight: bold; }
-        
-        .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
-        
-        /* قسم الطلب والإتمام */
-        .order-section { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px; display: none; } /* مخفي افتراضياً */
+        .product-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 10px; }
+        .new-price { color: var(--dark-pink); font-size: 1.2rem; font-weight: bold; display: block; margin: 10px 0; }
+        .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
+        .order-section { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px; display: none; }
         .btn-checkout { background: var(--gold); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
-        
         .order-form { display: none; margin-top: 15px; }
         .order-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; }
         .btn-whatsapp { background: #25D366; color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
-
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-        .item-qty { background: var(--gold); color: white; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin: 0 5px; }
-        .empty-msg { text-align: center; color: #888; margin-top: 50px; }
-        
-        .ltr { direction: ltr; } .rtl { direction: rtl; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .item-qty { background: var(--gold); color: white; padding: 2px 7px; border-radius: 10px; font-size: 0.8rem; }
     </style>
 </head>
-<body class="rtl" id="body">
+<body>
 
     <header>
-        <div class="logo" id="logo-text">إيليغانس بوتيك</div>
-        <div class="nav-tools">
-            <div class="lang-switcher">
-                <button class="lang-btn active" id="btn-ar" onclick="setLang('ar')">AR</button>
-                <button class="lang-btn" id="btn-fr" onclick="setLang('fr')">FR</button>
-            </div>
-            <button class="cart-icon" onclick="toggleCart()">
-                🛒 <span class="cart-count" id="cart-count">0</span>
-            </button>
-        </div>
+        <div class="logo">إيليغانس بوتيك</div>
+        <button class="cart-icon" onclick="toggleCart()">🛒 <span class="cart-count" id="cart-count">0</span></button>
     </header>
 
     <div class="cart-sidebar" id="cart-sidebar">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2 id="cart-title" style="margin: 0; font-size: 1.2rem;">سلة المشتريات</h2>
-            <button class="close-cart" onclick="toggleCart()">×</button>
+        <div style="display: flex; justify-content: space-between;">
+            <h3>سلة المشتريات</h3>
+            <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">×</button>
         </div>
         <hr>
-        
-        <div id="cart-items">
-            <p class="empty-msg">السلة فارغة حالياً</p>
-        </div>
-        
+        <div id="cart-items"></div>
         <div class="order-section" id="order-section">
-            <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> <span>دج</span></p>
+            <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> دج</p>
             <button class="btn-checkout" id="checkout-btn" onclick="openOrderForm()">إتمام الطلب</button>
-            
             <div class="order-form" id="order-form">
                 <input type="text" id="cust-name" placeholder="الاسم الكامل">
                 <input type="text" id="cust-address" placeholder="العنوان والولاية">
                 <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
-                <button class="btn-whatsapp" onclick="sendToWhatsApp()">تأكيد وإرسال عبر واتساب</button>
+                <button class="btn-whatsapp" onclick="sendToWhatsApp()">تأكيد عبر واتساب ✅</button>
             </div>
         </div>
     </div>
 
-    <section class="hero">
-        <h1 id="hero-title">مجموعتنا الجديدة 2026</h1>
-    </section>
-
-    <section class="section">
-        <div class="products-grid" id="grid"></div>
-    </section>
+    <section class="hero"><h1>مجموعتنا الجديدة 2026</h1></section>
+    <div class="products-grid" id="grid"></div>
 
     <script>
-        // تذكري وضع رقمك هنا
-        const WHATSAPP_NUM = "213XXXXXXXXX"; 
-
+        const WHATSAPP_NUM = "213XXXXXXXXX"; // استبدلي الرقم هنا
         const products = [
-            { id: 1, ar: "خمار موديل 1", fr: "Khimar Modèle 1", price: 1200, stock: 10 },
-            { id: 2, ar: "خمار موديل 2", fr: "Khimar Modèle 2", price: 1200, stock: 10 },
-            { id: 3, ar: "خمار موديل 3", fr: "Khimar Modèle 3", price: 1200, stock: 10 },
-            { id: 4, ar: "خمار موديل 4", fr: "Khimar Modèle 4", price: 1200, stock: 10 },
-            { id: 5, ar: "خمار موديل 5", fr: "Khimar Modèle 5", price: 1200, stock: 10 },
-            { id: 6, ar: "خمار موديل 6", fr: "Khimar Modèle 6", price: 1200, stock: 10 },
-            { id: 7, ar: "خمار موديل 7", fr: "Khimar Modèle 7", price: 1200, stock: 10 },
-            { id: 8, ar: "خمار موديل 8", fr: "Khimar Modèle 8", price: 1200, stock: 10 },
-            { id: 9, ar: "حجاب فلة", fr: "Hijab Fella", price: 4500, stock: 10 },
-            { id: 10, ar: "بيجامة", fr: "Pyjama", price: 2800, stock: 10 }
+            { id: 1, ar: "خمار موديل 1", price: 3500 },
+            { id: 2, ar: "خمار موديل 2", price: 2500 },
+            { id: 3, ar: "حجاب فلة", price: 2500 },
+            { id: 4, ar: "بيجامة", price: 2200 }
         ];
 
         let cart = {};
-        let currentLang = 'ar';
 
         function render() {
             const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            products.forEach(p => {
-                grid.innerHTML += `
-                    <div class="product-card">
-                        <img src="${p.id}.jpg" alt="${p[currentLang]}">
-                        <h3>${p[currentLang]}</h3>
-                        <div class="price-info">
-                            <span class="new-price">${p.price} دج</span>
-                            <span class="stock-label">المتوفر: ${p.stock}</span>
-                        </div>
-                        <button class="btn-add" onclick="addToCart(${p.id})">أضيفي للسلة</button>
-                    </div>`;
-            });
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <img src="${p.id}.jpg" alt="${p.ar}">
+                    <h3>${p.ar}</h3>
+                    <span class="new-price">${p.price} دج</span>
+                    <button class="btn-add" onclick="addToCart(${p.id})">أضيفي للسلة</button>
+                </div>
+            `).join('');
         }
 
         function addToCart(id) {
@@ -151,7 +98,6 @@
                 cart[id] = { ...p, qty: 1 };
             }
             updateUI();
-            // فتح السلة تلقائياً عند الإضافة لتنبيه الزبونة
             document.getElementById('cart-sidebar').classList.add('open');
         }
 
@@ -159,27 +105,23 @@
             const list = document.getElementById('cart-items');
             const orderSection = document.getElementById('order-section');
             let total = 0, count = 0;
-            
             list.innerHTML = '';
             
-            const cartKeys = Object.keys(cart);
-            
-            if (cartKeys.length === 0) {
-                list.innerHTML = '<p class="empty-msg">السلة فارغة حالياً</p>';
-                orderSection.style.display = 'none'; // إخفاء قسم الإتمام
+            if (Object.keys(cart).length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#888;">السلة فارغة</p>';
+                orderSection.style.display = 'none';
             } else {
-                orderSection.style.display = 'block'; // إظهار قسم الإتمام
-                cartKeys.forEach(id => {
+                orderSection.style.display = 'block';
+                for (let id in cart) {
                     const item = cart[id];
                     total += item.price * item.qty;
                     count += item.qty;
                     list.innerHTML += `<div class="cart-item">
-                        <div><strong>${item[currentLang]}</strong> <span class="item-qty">×${item.qty}</span></div>
+                        <div><strong>${item.ar}</strong> <span class="item-qty">×${item.qty}</span></div>
                         <span>${item.price * item.qty} دج</span>
                     </div>`;
-                });
+                }
             }
-            
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
         }
@@ -196,21 +138,12 @@
             if(!n || !a || !p) return alert("يرجى ملء البيانات");
 
             let msg = `طلب جديد:\nالاسم: ${n}\nالعنوان: ${a}\nالهاتف: ${p}\n\nالمنتجات:\n`;
-            for (let id in cart) msg += `- ${cart[id][currentLang]} (×${cart[id].qty})\n`;
+            for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
             msg += `\nالإجمالي: ${document.getElementById('cart-total').innerText} دج`;
-
             window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`);
         }
 
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
-        function setLang(l) { 
-            currentLang = l; 
-            document.getElementById('btn-ar').classList.toggle('active', l === 'ar');
-            document.getElementById('btn-fr').classList.toggle('active', l === 'fr');
-            render(); 
-            updateUI(); 
-        }
-        
         render();
     </script>
 </body>
