@@ -28,7 +28,7 @@
         .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 15px; border: 1px solid #eee; }
         .product-card img { width: 100%; height: 320px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
         
-        .new-price { color: var(--dark-pink); font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 10px; }
+        .new-price { color: var(--dark-pink); font-size: 1.25rem; font-weight: bold; display: block; margin-bottom: 10px; }
         .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
 
         .order-section { margin-top: 20px; padding: 15px; background: #fff; border: 1px solid #ddd; border-radius: 10px; display: none; }
@@ -37,14 +37,26 @@
         .contact-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .contact-btn {
             padding: 12px; border-radius: 25px; color: white; border: none;
-            font-weight: bold; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 5px;
+            font-weight: bold; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px;
         }
         .bg-insta { background: var(--instagram); }
         .bg-wa { background: var(--whatsapp); }
 
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        /* ستايل التنبيه الجديد */
+        .alert-text {
+            background: #fff4f7;
+            color: #d95988;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            border: 1px dashed #d95988;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
         .qty-badge { background: var(--gold); color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; margin-right: 5px; }
-        .remove-item { color: red; cursor: pointer; font-weight: bold; margin-right: 10px; background: none; border: none; }
     </style>
 </head>
 <body>
@@ -56,7 +68,7 @@
 
     <div class="cart-sidebar" id="cart-sidebar">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3>سلة التسوق</h3>
+            <h3 style="margin:0;">سلة المشتريات</h3>
             <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer;">×</button>
         </div>
         <hr>
@@ -66,13 +78,18 @@
             <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> دج</p>
             <div class="order-form">
                 <input type="text" id="cust-name" placeholder="الاسم الكامل">
-                <input type="text" id="cust-address" placeholder="العنوان (الولاية والبلدية)">
+                <input type="text" id="cust-address" placeholder="العنوان بالتفصيل">
                 <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
                 
-                <p style="font-size: 0.75rem; color: #666; margin: 5px 0;">عند الضغط، سيتم نسخ الطلب وتفتح المحادثة:</p>
+                <p style="font-size: 0.85rem; font-weight: bold; margin: 10px 0;">اضغط لتأكيد الطلب عبر:</p>
                 <div class="contact-options">
-                    <button class="contact-btn bg-wa" onclick="processOrder('wa')">عبر واتساب</button>
-                    <button class="contact-btn bg-insta" onclick="processOrder('insta')">عبر انستغرام</button>
+                    <button class="contact-btn bg-insta" onclick="processOrder('insta')">انستغرام 📸</button>
+                    <button class="contact-btn bg-wa" onclick="processOrder('wa')">واتساب ✅</button>
+                </div>
+
+                <div class="alert-text">
+                    ⚠️ <strong>ملاحظة لمستخدمي انستغرام:</strong><br>
+                    عند الضغط، سيتم نسخ بيانات طلبك تلقائياً. يرجى عمل <strong>"لصق" (Paste)</strong> في المحادثة عند فتح الخاص لإرسال الطلب.
                 </div>
             </div>
         </div>
@@ -102,7 +119,7 @@
             const grid = document.getElementById('grid');
             grid.innerHTML = products.map(p => `
                 <div class="product-card">
-                    <img src="${p.img}.jpg" onerror="this.src='https://via.placeholder.com/300x400?text=CH'">
+                    <img src="${p.img}.jpg" alt="${p.ar}" onerror="this.src='https://via.placeholder.com/300x400?text=CH'">
                     <h3>${p.ar}</h3>
                     <span class="new-price">${p.price} دج</span>
                     <button class="btn-add" onclick="addToCart(${p.id})">أضيفي للسلة</button>
@@ -112,17 +129,9 @@
 
         function addToCart(id) {
             if (cart[id]) cart[id].qty++;
-            else {
-                const p = products.find(i => i.id === id);
-                cart[id] = { ...p, qty: 1 };
-            }
+            else { const p = products.find(i => i.id === id); cart[id] = { ...p, qty: 1 }; }
             updateUI();
             document.getElementById('cart-sidebar').classList.add('open');
-        }
-
-        function removeItem(id) {
-            delete cart[id];
-            updateUI();
         }
 
         function updateUI() {
@@ -130,47 +139,33 @@
             const orderSection = document.getElementById('order-section');
             let total = 0; let count = 0;
             list.innerHTML = '';
-            
             for (let id in cart) {
                 const item = cart[id];
-                total += (item.price * item.qty);
-                count += item.qty;
-                list.innerHTML += `
-                    <div class="cart-item">
-                        <div>
-                            <strong>${item.ar}</strong> 
-                            <span class="qty-badge">×${item.qty}</span>
-                        </div>
-                        <div>
-                            <span>${item.price * item.qty} دج</span>
-                            <button class="remove-item" onclick="removeItem(${id})">×</button>
-                        </div>
-                    </div>`;
+                total += item.price * item.qty; count += item.qty;
+                list.innerHTML += `<div class="cart-item"><div><strong>${item.ar}</strong> <span class="qty-badge">×${item.qty}</span></div><span>${item.price * item.qty} دج</span></div>`;
             }
-            
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
             orderSection.style.display = count > 0 ? 'block' : 'none';
         }
 
         function processOrder(platform) {
-            const name = document.getElementById('cust-name').value;
-            const addr = document.getElementById('cust-address').value;
-            const phone = document.getElementById('cust-phone').value;
+            const n = document.getElementById('cust-name').value;
+            const a = document.getElementById('cust-address').value;
+            const p = document.getElementById('cust-phone').value;
 
-            if(!name || !addr || !phone) return alert("يرجى ملء البيانات أولاً.");
+            if(!n || !a || !p) return alert("يرجى إكمال بياناتك أولاً.");
 
-            let msg = `طلب جديد من CH_LINGERIE:\n\n👤 الاسم: ${name}\n📍 العنوان: ${addr}\n📞 الهاتف: ${phone}\n\n📦 المنتجات:\n`;
-            for (let id in cart) {
-                msg += `- ${cart[id].ar} (الكمية: ${cart[id].qty})\n`;
-            }
-            msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
+            let msg = `طلب جديد من متجر CH_LINGERIE:\n\n`;
+            msg += `👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلبية:\n`;
+            for (let id in cart) msg += `- ${cart[id].ar} (الكمية: ${cart[id].qty})\n`;
+            msg += `\n💰 المجموع: ${document.getElementById('cart-total').innerText} دج`;
 
             if(platform === 'wa') {
                 window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
             } else {
                 navigator.clipboard.writeText(msg).then(() => {
-                    alert("تم نسخ تفاصيل الطلب! عند فتح انستغرام، اضغط 'لصق' في الرسائل.");
+                    alert("✅ تم نسخ بيانات طلبك! بمجرد فتح انستغرام، اضغطي ضغطة مطولة في خانة الرسالة واختاري 'لصق' (Paste).");
                     window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
                 });
             }
