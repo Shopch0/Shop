@@ -15,7 +15,6 @@
         }
         .logo { font-size: 1.3rem; font-weight: bold; color: var(--dark-pink); }
         .nav-tools { display: flex; align-items: center; gap: 15px; }
-        
         .lang-btn { background: #eee; border: none; padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
         .lang-btn.active { background: var(--gold); color: white; }
 
@@ -46,6 +45,14 @@
         
         .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
         
+        /* استمارة الطلب وزر الإتمام */
+        .order-section { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px; }
+        .btn-checkout { background: var(--gold); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 10px; }
+        
+        .order-form { display: none; margin-top: 15px; }
+        .order-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; }
+        .btn-whatsapp { background: #25D366; color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
+
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
         .item-qty { background: var(--gold); color: white; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin: 0 5px; }
         
@@ -74,8 +81,17 @@
         </div>
         <hr>
         <div id="cart-items"></div>
-        <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px;">
-            <p style="margin: 0;"><strong id="total-text">الإجمالي:</strong> <span id="cart-total">0</span> <span class="curr">دج</span></p>
+        
+        <div class="order-section" id="order-section">
+            <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> <span class="curr">دج</span></p>
+            <button class="btn-checkout" id="checkout-btn" onclick="openOrderForm()">إتمام الطلب</button>
+            
+            <div class="order-form" id="order-form">
+                <input type="text" id="cust-name" placeholder="الاسم الكامل">
+                <input type="text" id="cust-address" placeholder="العنوان والولاية">
+                <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
+                <button class="btn-whatsapp" onclick="sendToWhatsApp()">تأكيد وإرسال عبر واتساب</button>
+            </div>
         </div>
     </div>
 
@@ -88,6 +104,9 @@
     </section>
 
     <script>
+        // ضعي رقم هاتفك هنا (مثال: 213555112233)
+        const WHATSAPP_NUM = "213XXXXXXXXX"; 
+
         const products = [
             { id: 1, ar: "خمار موديل 1", fr: "Khimar Modèle 1", price: 1200, stock: 10 },
             { id: 2, ar: "خمار موديل 2", fr: "Khimar Modèle 2", price: 1200, stock: 10 },
@@ -101,12 +120,8 @@
             { id: 10, ar: "بيجامة", fr: "Pyjama", price: 2800, stock: 10 }
         ];
 
-        let cart = {}; 
+        let cart = {};
         let currentLang = 'ar';
-        const t = {
-            ar: { logo: "إيليغانس بوتيك", heroT: "مجموعتنا الجديدة 2026", btn: "أضيفي للسلة", cartT: "سلة المشتريات", total: "الإجمالي:", curr: "دج", qty: "المتوفر: ", dir: "rtl" },
-            fr: { logo: "ELEGANCE", heroT: "Collection 2026", btn: "Ajouter au panier", cartT: "Votre Panier", total: "Total:", curr: "DA", qty: "Stock: ", dir: "ltr" }
-        };
 
         function render() {
             const grid = document.getElementById('grid');
@@ -117,67 +132,61 @@
                         <img src="${p.id}.jpg" alt="${p[currentLang]}">
                         <h3>${p[currentLang]}</h3>
                         <div class="price-info">
-                            <span class="new-price">${p.price} ${t[currentLang].curr}</span>
-                            <span class="stock-label">${t[currentLang].qty} ${p.stock}</span>
+                            <span class="new-price">${p.price} دج</span>
+                            <span class="stock-label">المتوفر: ${p.stock}</span>
                         </div>
-                        <button class="btn-add" onclick="addToCart(${p.id})">${t[currentLang].btn}</button>
+                        <button class="btn-add" onclick="addToCart(${p.id})">أضيفي للسلة</button>
                     </div>`;
             });
         }
 
         function addToCart(id) {
-            if (cart[id]) {
-                cart[id].qty += 1;
-            } else {
-                const product = products.find(p => p.id === id);
-                cart[id] = { ...product, qty: 1 };
+            if (cart[id]) cart[id].qty++;
+            else {
+                const p = products.find(i => i.id === id);
+                cart[id] = { ...p, qty: 1 };
             }
-            updateCartUI();
+            updateUI();
         }
 
-        function updateCartUI() {
-            const itemsDiv = document.getElementById('cart-items');
-            itemsDiv.innerHTML = '';
-            let total = 0;
-            let count = 0;
-
-            for (const id in cart) {
+        function updateUI() {
+            const list = document.getElementById('cart-items');
+            list.innerHTML = '';
+            let total = 0, count = 0;
+            for (let id in cart) {
                 const item = cart[id];
                 total += item.price * item.qty;
                 count += item.qty;
-                itemsDiv.innerHTML += `
-                    <div class="cart-item">
-                        <div>
-                            <strong>${item[currentLang]}</strong>
-                            <span class="item-qty">×${item.qty}</span>
-                        </div>
-                        <span>${item.price * item.qty} ${t[currentLang].curr}</span>
-                    </div>`;
+                list.innerHTML += `<div class="cart-item">
+                    <div><strong>${item[currentLang]}</strong> <span class="item-qty">×${item.qty}</span></div>
+                    <span>${item.price * item.qty} دج</span>
+                </div>`;
             }
-
-            document.getElementById('cart-count').innerText = count;
             document.getElementById('cart-total').innerText = total;
+            document.getElementById('cart-count').innerText = count;
         }
 
-        function toggleCart() {
-            document.getElementById('cart-sidebar').classList.toggle('open');
+        function openOrderForm() {
+            if (Object.keys(cart).length === 0) return alert("السلة فارغة!");
+            document.getElementById('order-form').style.display = 'block';
+            document.getElementById('checkout-btn').style.display = 'none';
         }
 
-        function setLang(lang) {
-            currentLang = lang;
-            document.getElementById('body').className = t[lang].dir;
-            document.getElementById('logo-text').innerText = t[lang].logo;
-            document.getElementById('hero-title').innerText = t[lang].heroT;
-            document.getElementById('cart-title').innerText = t[lang].cartT;
-            document.getElementById('total-text').innerText = t[lang].total;
-            
-            document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
-            document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
-            
-            render();
-            updateCartUI();
+        function sendToWhatsApp() {
+            const n = document.getElementById('cust-name').value;
+            const a = document.getElementById('cust-address').value;
+            const p = document.getElementById('cust-phone').value;
+            if(!n || !a || !p) return alert("يرجى ملء البيانات");
+
+            let msg = `طلب جديد:\nالاسم: ${n}\nالعنوان: ${a}\nالهاتف: ${p}\n\nالمنتجات:\n`;
+            for (let id in cart) msg += `- ${cart[id][currentLang]} (الكمية: ${cart[id].qty})\n`;
+            msg += `\nالإجمالي: ${document.getElementById('cart-total').innerText} دج`;
+
+            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`);
         }
 
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
+        function setLang(l) { currentLang = l; render(); updateUI(); }
         render();
     </script>
 </body>
