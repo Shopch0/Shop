@@ -5,92 +5,180 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إيليغانس بوتيك | Elegance Boutique</title>
     <style>
-        :root {
-            --dark-pink: #d95988;
-            --gold: #b89060;
-            --soft-gray: #f9f9f9;
-        }
+        :root { --dark-pink: #d95988; --gold: #b89060; --soft-gray: #f9f9f9; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { margin: 0; padding: 0; background-color: #fff; scroll-behavior: smooth; }
+        body { margin: 0; padding: 0; background-color: #fff; }
         
         header {
-            background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+            background: #fff; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 1000;
         }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--dark-pink); }
-        .lang-btn { background: #eee; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: bold; margin-left: 5px; }
+        .logo { font-size: 1.3rem; font-weight: bold; color: var(--dark-pink); }
+        .nav-tools { display: flex; align-items: center; gap: 15px; }
+        
+        .lang-btn { background: #eee; border: none; padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
         .lang-btn.active { background: var(--gold); color: white; }
 
-        .hero {
-            height: 35vh; background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), 
-            url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000');
-            background-size: cover; background-position: center; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center; margin-top: 60px;
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.5rem; background: none; border: none; padding: 5px; }
+        .cart-count { 
+            position: absolute; top: 0; right: 0; background: var(--dark-pink); 
+            color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; 
         }
 
-        .section { padding: 30px 5%; }
-        .section-title { text-align: center; font-size: 2rem; margin-bottom: 30px; color: var(--gold); }
-        
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 12px; border: 1px solid #eee; }
-        .product-card img { width: 100%; height: 380px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
-        
-        .new-price { color: var(--dark-pink); font-size: 1.2rem; font-weight: bold; }
-        .btn-add { background: var(--dark-pink); color: white; border: none; padding: 10px; border-radius: 20px; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 10px; }
+        .cart-sidebar {
+            position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
+            background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); z-index: 2000;
+            padding: 20px; overflow-y: auto;
+        }
+        .cart-sidebar.open { right: 0; }
+        .close-cart { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--dark-pink); }
 
-        footer { background: #222; color: #fff; text-align: center; padding: 20px; margin-top: 40px; }
+        .hero { height: 25vh; background: #fce4ec; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; margin-top: 60px; }
+        .section { padding: 30px 5%; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 15px; border: 1px solid #eee; }
+        .product-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
+        
+        .price-info { margin: 10px 0; font-size: 0.95rem; }
+        .stock-label { color: #666; font-size: 0.85rem; display: block; margin-top: 5px; }
+        .new-price { color: var(--dark-pink); font-size: 1.2rem; font-weight: bold; }
+        
+        .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
+        
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .item-qty { background: var(--gold); color: white; padding: 2px 8px; border-radius: 10px; font-weight: bold; margin: 0 5px; }
+        
+        .ltr { direction: ltr; } .rtl { direction: rtl; }
     </style>
 </head>
-<body>
+<body class="rtl" id="body">
 
     <header>
-        <div class="logo">إيليغانس بوتيك</div>
-        <div>
-            <button class="lang-btn active">عربي</button>
+        <div class="logo" id="logo-text">إيليغانس بوتيك</div>
+        <div class="nav-tools">
+            <div class="lang-switcher">
+                <button class="lang-btn active" id="btn-ar" onclick="setLang('ar')">AR</button>
+                <button class="lang-btn" id="btn-fr" onclick="setLang('fr')">FR</button>
+            </div>
+            <button class="cart-icon" onclick="toggleCart()">
+                🛒 <span class="cart-count" id="cart-count">0</span>
+            </button>
         </div>
     </header>
 
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 id="cart-title" style="margin: 0; font-size: 1.2rem;">سلة المشتريات</h2>
+            <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <hr>
+        <div id="cart-items"></div>
+        <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px;">
+            <p style="margin: 0;"><strong id="total-text">الإجمالي:</strong> <span id="cart-total">0</span> <span class="curr">دج</span></p>
+        </div>
+    </div>
+
     <section class="hero">
-        <h1>مجموعتنا الجديدة 2026</h1>
-        <p>أرقى الموديلات الجزائرية بأسعار تنافسية</p>
+        <h1 id="hero-title">مجموعتنا الجديدة 2026</h1>
     </section>
 
     <section class="section">
-        <h2 class="section-title">أحدث الموديلات</h2>
-        <div class="products-grid" id="grid">
-            </div>
+        <div class="products-grid" id="grid"></div>
     </section>
 
-    <footer><p>© 2026 إيليغانس بوتيك - جميع الحقوق محفوظة</p></footer>
-
     <script>
-        // مصفوفة المنتجات بناءً على طلبك
         const products = [
-            { id: 1, name: "خمار", price: "1200 دج" },
-            { id: 2, name: "خمار", price: "1200 دج" },
-            { id: 3, name: "خمار", price: "1200 دج" },
-            { id: 4, name: "خمار", price: "1200 دج" },
-            { id: 5, name: "خمار", price: "1200 دج" },
-            { id: 6, name: "خمار", price: "1200 دج" },
-            { id: 7, name: "خمار", price: "1200 دج" },
-            { id: 8, name: "خمار", price: "1200 دج" },
-            { id: 9, name: "حجاب فلة", price: "4500 دج" },
-            { id: 10, name: "بيجاما", price: "2800 دج" }
+            { id: 1, ar: "خمار موديل 1", fr: "Khimar Modèle 1", price: 1200, stock: 10 },
+            { id: 2, ar: "خمار موديل 2", fr: "Khimar Modèle 2", price: 1200, stock: 10 },
+            { id: 3, ar: "خمار موديل 3", fr: "Khimar Modèle 3", price: 1200, stock: 10 },
+            { id: 4, ar: "خمار موديل 4", fr: "Khimar Modèle 4", price: 1200, stock: 10 },
+            { id: 5, ar: "خمار موديل 5", fr: "Khimar Modèle 5", price: 1200, stock: 10 },
+            { id: 6, ar: "خمار موديل 6", fr: "Khimar Modèle 6", price: 1200, stock: 10 },
+            { id: 7, ar: "خمار موديل 7", fr: "Khimar Modèle 7", price: 1200, stock: 10 },
+            { id: 8, ar: "خمار موديل 8", fr: "Khimar Modèle 8", price: 1200, stock: 10 },
+            { id: 9, ar: "حجاب فلة", fr: "Hijab Fella", price: 4500, stock: 10 },
+            { id: 10, ar: "بيجامة", fr: "Pyjama", price: 2800, stock: 10 }
         ];
 
-        const grid = document.getElementById('grid');
-        products.forEach(p => {
-            grid.innerHTML += `
-                <div class="product-card">
-                    <img src="${p.id}.jpg" alt="${p.name}">
-                    <h3>${p.name}</h3>
-                    <div class="price-box">
-                        <span class="new-price">${p.price}</span>
-                    </div>
-                    <button class="btn-add">أضيفي للسلة</button>
-                </div>
-            `;
-        });
+        let cart = {}; 
+        let currentLang = 'ar';
+        const t = {
+            ar: { logo: "إيليغانس بوتيك", heroT: "مجموعتنا الجديدة 2026", btn: "أضيفي للسلة", cartT: "سلة المشتريات", total: "الإجمالي:", curr: "دج", qty: "المتوفر: ", dir: "rtl" },
+            fr: { logo: "ELEGANCE", heroT: "Collection 2026", btn: "Ajouter au panier", cartT: "Votre Panier", total: "Total:", curr: "DA", qty: "Stock: ", dir: "ltr" }
+        };
+
+        function render() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            products.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.id}.jpg" alt="${p[currentLang]}">
+                        <h3>${p[currentLang]}</h3>
+                        <div class="price-info">
+                            <span class="new-price">${p.price} ${t[currentLang].curr}</span>
+                            <span class="stock-label">${t[currentLang].qty} ${p.stock}</span>
+                        </div>
+                        <button class="btn-add" onclick="addToCart(${p.id})">${t[currentLang].btn}</button>
+                    </div>`;
+            });
+        }
+
+        function addToCart(id) {
+            if (cart[id]) {
+                cart[id].qty += 1;
+            } else {
+                const product = products.find(p => p.id === id);
+                cart[id] = { ...product, qty: 1 };
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const itemsDiv = document.getElementById('cart-items');
+            itemsDiv.innerHTML = '';
+            let total = 0;
+            let count = 0;
+
+            for (const id in cart) {
+                const item = cart[id];
+                total += item.price * item.qty;
+                count += item.qty;
+                itemsDiv.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item[currentLang]}</strong>
+                            <span class="item-qty">×${item.qty}</span>
+                        </div>
+                        <span>${item.price * item.qty} ${t[currentLang].curr}</span>
+                    </div>`;
+            }
+
+            document.getElementById('cart-count').innerText = count;
+            document.getElementById('cart-total').innerText = total;
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            document.getElementById('body').className = t[lang].dir;
+            document.getElementById('logo-text').innerText = t[lang].logo;
+            document.getElementById('hero-title').innerText = t[lang].heroT;
+            document.getElementById('cart-title').innerText = t[lang].cartT;
+            document.getElementById('total-text').innerText = t[lang].total;
+            
+            document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+            document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
+            
+            render();
+            updateCartUI();
+        }
+
+        render();
     </script>
 </body>
 </html>
