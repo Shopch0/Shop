@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CH_LINGERIE | متجر</title>
     <style>
-        :root { --main-pink: #d95988; --dark-gray: #333; --light-pink: #fff4f7; --gold: #b89060; }
+        :root { --main-pink: #d95988; --dark-gray: #333; --light-pink: #fff4f7; --gold: #b89060; --whatsapp: #25D366; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { margin: 0; background-color: #fff; padding-top: 70px; }
 
@@ -17,7 +17,7 @@
         .cart-icon { position: relative; cursor: pointer; font-size: 1.6rem; background: none; border: none; }
         .cart-count { position: absolute; top: -5px; right: -10px; background: var(--main-pink); color: white; font-size: 0.7rem; padding: 3px 7px; border-radius: 50%; }
 
-        /* قائمة السلة الجانبية */
+        /* السلة الجانبية */
         .cart-sidebar {
             position: fixed; top: 0; right: -350px; width: 320px; height: 100%;
             background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.1); z-index: 2000;
@@ -33,31 +33,29 @@
         .price { color: var(--main-pink); font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 10px; }
         .btn-add { background: var(--main-pink); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
 
-        /* ستايل المنتجات داخل السلة مع زر الحذف */
+        /* عناصر السلة */
         .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0; font-size: 0.9rem; }
-        .remove-btn { color: #ff4d4d; background: none; border: none; font-size: 1.2rem; cursor: pointer; font-weight: bold; padding: 0 5px; }
-        .remove-btn:hover { color: #cc0000; transform: scale(1.2); }
+        .remove-btn { color: #ff4d4d; background: none; border: none; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
 
-        /* فورم البيانات */
-        .order-form { margin-top: 20px; background: var(--light-pink); padding: 15px; border-radius: 15px; }
-        .order-form input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        .btn-order { background: var(--main-pink); color: white; border: none; padding: 12px; border-radius: 25px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
-
-        /* النافذة المنبثقة الاحترافية */
-        .modal-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 3000;
-            backdrop-filter: blur(4px);
-        }
-        .modal-card {
-            background: white; width: 90%; max-width: 350px; padding: 30px; border-radius: 20px; text-align: center;
-            position: relative; animation: popIn 0.3s ease-out;
-        }
-        @keyframes popIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* قسم ملأ البيانات (مخفي في البداية) */
+        #order-details-form { display: none; background: var(--light-pink); padding: 15px; border-radius: 15px; margin-top: 15px; animation: slideDown 0.4s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .modal-card .icon-circle { width: 60px; height: 60px; background: var(--light-pink); color: var(--main-pink); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 15px; }
-        .modal-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
-        .close-modal { margin-top: 15px; background: none; border: none; color: #999; cursor: pointer; font-size: 0.8rem; text-decoration: underline; }
+        .order-form input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        
+        /* زر التأكيد الأولي */
+        .btn-confirm-start { background: var(--main-pink); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1rem; }
+
+        /* أزرار التواصل */
+        .contact-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .btn-contact { padding: 12px; border: none; border-radius: 25px; color: white; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
+        .bg-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .bg-wa { background: var(--whatsapp); }
+
+        /* المودال (النافذة المنبثقة) */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(4px); }
+        .modal-card { background: white; width: 90%; max-width: 350px; padding: 30px; border-radius: 20px; text-align: center; }
+        .modal-btn { background: #333; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 15px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -69,18 +67,27 @@
 
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="sidebar-header">
-            <h3 style="margin:0;">طلباتكِ المختارة</h3>
+            <h3 style="margin:0;">سلة المشتريات</h3>
             <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">×</button>
         </div>
         <div id="cart-items"></div>
         
         <div id="order-section" style="display:none;">
             <p style="font-weight:bold; margin-top:15px; font-size: 1.1rem;">الإجمالي: <span id="cart-total">0</span> دج</p>
-            <div class="order-form">
-                <input type="text" id="cust-name" placeholder="الاسم الكامل">
-                <input type="text" id="cust-address" placeholder="الولاية والبلدية">
-                <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
-                <button class="btn-order" onclick="processOrder()">إرسال الطلب عبر انستغرام 📸</button>
+            
+            <button id="confirm-order-btn" class="btn-confirm-start" onclick="showOrderForm()">تأكيد المشتريات ✅</button>
+
+            <div id="order-details-form">
+                <div class="order-form">
+                    <input type="text" id="cust-name" placeholder="الاسم الكامل">
+                    <input type="text" id="cust-address" placeholder="الولاية والبلدية">
+                    <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
+                    <p style="font-size: 0.75rem; text-align: center; margin-bottom: 10px; font-weight: bold;">أكملي الطلب عبر:</p>
+                    <div class="contact-btns">
+                        <button class="btn-contact bg-insta" onclick="processOrder('insta')">انستغرام 📸</button>
+                        <button class="btn-contact bg-wa" onclick="processOrder('wa')">واتساب ✅</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -89,16 +96,17 @@
 
     <div class="modal-overlay" id="custom-modal">
         <div class="modal-card">
-            <div class="icon-circle">✅</div>
-            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">تم نسخ البيانات!</h2>
-            <p style="font-size: 0.85rem; color: #555;">قومي بعمل <b>"لصق" (Paste)</b> في المحادثة عند فتح انستغرام لإرسال طلبكِ.</p>
-            <button class="modal-btn" onclick="goToInsta()">فتح انستغرام الآن</button>
-            <button class="close-modal" onclick="closeModal()">إغلاق</button>
+            <div style="font-size: 3rem; margin-bottom: 10px;">✨</div>
+            <h2 id="modal-title">تم النسخ!</h2>
+            <p id="modal-text">يرجى عمل "لصق" عند فتح التطبيق.</p>
+            <button class="modal-btn" id="modal-action-btn">فتح التطبيق الآن</button>
         </div>
     </div>
 
     <script>
+        const WHATSAPP_NUM = "213557764143"; 
         const INSTA_USER = "ch_lingerie20";
+        
         const products = [
             { id: 1,  img: "1",  ar: "خمار موديل 1", price: 3500 },
             { id: 2,  img: "6",  ar: "خمار موديل 2", price: 2500 },
@@ -132,11 +140,7 @@
             document.getElementById('cart-sidebar').classList.add('open');
         }
 
-        // دالة حذف منتج من السلة
-        function removeFromCart(id) {
-            delete cart[id];
-            updateUI();
-        }
+        function removeFromCart(id) { delete cart[id]; updateUI(); }
 
         function updateUI() {
             const list = document.getElementById('cart-items');
@@ -145,38 +149,65 @@
             for (let id in cart) {
                 const item = cart[id];
                 total += item.price * item.qty; count += item.qty;
-                list.innerHTML += `
-                    <div class="cart-item">
-                        <div><strong>${item.ar}</strong> <small>(×${item.qty})</small></div>
-                        <div style="display:flex; align-items:center;">
-                            <span style="font-weight:bold; margin-left:10px;">${item.price * item.qty} دج</span>
-                            <button class="remove-btn" onclick="removeFromCart(${id})">×</button>
-                        </div>
-                    </div>`;
+                list.innerHTML += `<div class="cart-item"><span>${item.ar} (×${item.qty})</span><div><span style="font-weight:bold; margin-left:10px;">${item.price * item.qty} دج</span><button class="remove-btn" onclick="removeFromCart(${id})">×</button></div></div>`;
             }
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
-            document.getElementById('order-section').style.display = count > 0 ? 'block' : 'none';
+            
+            const orderSection = document.getElementById('order-section');
+            if(count > 0) {
+                orderSection.style.display = 'block';
+            } else {
+                orderSection.style.display = 'none';
+                resetOrderForm(); // إعادة إخفاء الفورم إذا أصبحت السلة فارغة
+            }
         }
 
-        function processOrder() {
+        // إظهار حقول البيانات عند الضغط على تأكيد
+        function showOrderForm() {
+            document.getElementById('confirm-order-btn').style.display = 'none';
+            document.getElementById('order-details-form').style.display = 'block';
+        }
+
+        // إعادة ضبط السلة للحالة الأولية
+        function resetOrderForm() {
+            document.getElementById('confirm-order-btn').style.display = 'block';
+            document.getElementById('order-details-form').style.display = 'none';
+        }
+
+        function processOrder(platform) {
             const n = document.getElementById('cust-name').value;
             const a = document.getElementById('cust-address').value;
             const p = document.getElementById('cust-phone').value;
-            if(!n || !a || !p) return alert("يرجى ملء بياناتكِ أولاً");
+            if(!n || !a || !p) return alert("يرجى ملء بياناتكِ أولاً لإتمام الطلب.");
 
-            let msg = `طلب جديد من CH_LINGERIE:\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلب:\n`;
+            let msg = `طلب جديد من CH_LINGERIE:\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 المنتجات:\n`;
             for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
             msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
 
             navigator.clipboard.writeText(msg).then(() => {
-                document.getElementById('custom-modal').style.display = 'flex';
+                const modal = document.getElementById('custom-modal');
+                const btn = document.getElementById('modal-action-btn');
+                modal.style.display = 'flex';
+                
+                if(platform === 'wa') {
+                    document.getElementById('modal-title').innerText = "جاهز للإرسال ✅";
+                    document.getElementById('modal-text').innerText = "تم نسخ الطلب! سنفتح لكِ واتساب الآن.";
+                    btn.className = "modal-btn bg-wa";
+                    btn.onclick = () => window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
+                } else {
+                    document.getElementById('modal-title').innerText = "تم النسخ بنجاح! 📸";
+                    document.getElementById('modal-text').innerText = "اضغطي 'لصق' (Paste) عند فتح محادثة انستغرام.";
+                    btn.className = "modal-btn bg-insta";
+                    btn.onclick = () => window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
+                }
             });
         }
 
-        function goToInsta() { window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank"); closeModal(); }
-        function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
-        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
+        function toggleCart() { 
+            document.getElementById('cart-sidebar').classList.toggle('open'); 
+        }
+
         render();
     </script>
 </body>
