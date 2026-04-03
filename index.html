@@ -3,114 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CH_LINGERIE</title>
+    <title>CH_LINGERIE | متجر</title>
     <style>
-        :root { --dark-pink: #d95988; --gold: #b89060; --soft-gray: #f9f9f9; --instagram: #E1306C; --whatsapp: #25D366; }
+        :root { --main-pink: #d95988; --dark-gray: #333; --light-pink: #fff4f7; --gold: #b89060; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { margin: 0; padding: 0; background-color: #fff; padding-bottom: 30px; }
-        
-        header {
-            background: #fff; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
-            position: fixed; width: 100%; top: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); z-index: 1000;
-        }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--dark-pink); }
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.5rem; background: none; border: none; }
-        .cart-count { position: absolute; top: 0; right: 0; background: var(--dark-pink); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; }
+        body { margin: 0; background-color: #fff; padding-top: 70px; }
 
+        /* الهيدر */
+        header {
+            background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; width: 100%; top: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000;
+        }
+        .logo { font-size: 1.4rem; font-weight: 900; color: var(--main-pink); letter-spacing: 1px; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.6rem; background: none; border: none; }
+        .cart-count { position: absolute; top: -5px; right: -10px; background: var(--main-pink); color: white; font-size: 0.7rem; padding: 3px 7px; border-radius: 50%; }
+
+        /* قائمة السلة الجانبية */
         .cart-sidebar {
-            position: fixed; top: 0; right: -320px; width: 310px; height: 100%;
-            background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); z-index: 2000;
-            padding: 20px; overflow-y: auto;
+            position: fixed; top: 0; right: -350px; width: 320px; height: 100%;
+            background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.1); z-index: 2000;
+            padding: 25px; overflow-y: auto;
         }
         .cart-sidebar.open { right: 0; }
+        .cart-sidebar h3 { border-bottom: 2px solid var(--light-pink); padding-bottom: 10px; margin-bottom: 20px; }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 30px 5%; margin-top: 70px; }
-        .product-card { background: var(--soft-gray); padding: 15px; text-align: center; border-radius: 15px; border: 1px solid #eee; }
-        .product-card img { width: 100%; height: 320px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
-        
-        .new-price { color: var(--dark-pink); font-size: 1.25rem; font-weight: bold; display: block; margin-bottom: 10px; }
-        .btn-add { background: var(--dark-pink); color: white; border: none; padding: 12px; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold; }
+        /* المنتجات */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 20px 5%; }
+        .product-card { background: #fdfdfd; padding: 10px; border-radius: 15px; border: 1px solid #eee; text-align: center; }
+        .product-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; }
+        .product-card h3 { font-size: 0.95rem; margin: 10px 0; color: var(--dark-gray); }
+        .price { color: var(--main-pink); font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 10px; }
+        .btn-add { background: var(--main-pink); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
 
-        .order-section { margin-top: 20px; padding: 15px; background: #fff; border: 1px solid #ddd; border-radius: 10px; display: none; }
-        .order-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        
-        .contact-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .contact-btn {
-            padding: 12px; border-radius: 25px; color: white; border: none;
-            font-weight: bold; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px;
+        /* فورم البيانات */
+        .order-form { margin-top: 20px; background: var(--light-pink); padding: 15px; border-radius: 15px; }
+        .order-form input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        .btn-order { background: var(--main-pink); color: white; border: none; padding: 12px; border-radius: 25px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
+
+        /* النافذة المنبثقة الاحترافية (Custom Modal) */
+        .modal-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 3000;
+            backdrop-filter: blur(4px);
         }
-        .bg-insta { background: var(--instagram); }
-        .bg-wa { background: var(--whatsapp); }
-
-        .alert-text {
-            background: #fff4f7;
-            color: #d95988;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            margin-top: 15px;
-            border: 1px dashed #d95988;
-            line-height: 1.4;
-            text-align: center;
+        .modal-card {
+            background: white; width: 90%; max-width: 350px; padding: 30px; border-radius: 20px; text-align: center;
+            position: relative; animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .modal-card .icon-circle {
+            width: 70px; height: 70px; background: var(--light-pink); color: var(--main-pink);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; margin: 0 auto 20px;
+        }
+        .modal-card h2 { margin: 0 0 10px; color: var(--dark-gray); font-size: 1.2rem; }
+        .modal-card p { font-size: 0.9rem; color: #666; line-height: 1.5; margin-bottom: 25px; }
+        .modal-btn {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%;
+        }
+        .close-modal { margin-top: 15px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem; text-decoration: underline; }
 
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .qty-badge { background: var(--gold); color: white; padding: 2px 6px; border-radius: 8px; font-size: 0.75rem; margin-right: 5px; }
+        .cart-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">CH_LINGERIE</div>
+        <div class="logo">CH LINGERIE</div>
         <button class="cart-icon" onclick="toggleCart()">🛒 <span class="cart-count" id="cart-count">0</span></button>
     </header>
 
     <div class="cart-sidebar" id="cart-sidebar">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="margin:0;">سلة المشتريات</h3>
-            <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer;">×</button>
-        </div>
-        <hr>
+        <h3>مشترياتكِ</h3>
         <div id="cart-items"></div>
-        
-        <div class="order-section" id="order-section">
-            <p><strong>الإجمالي:</strong> <span id="cart-total">0</span> دج</p>
+        <div id="order-section" style="display:none;">
+            <p style="font-weight:bold; margin-top:15px;">الإجمالي: <span id="cart-total">0</span> دج</p>
             <div class="order-form">
                 <input type="text" id="cust-name" placeholder="الاسم الكامل">
-                <input type="text" id="cust-address" placeholder="العنوان بالتفصيل">
+                <input type="text" id="cust-address" placeholder="الولاية / البلدية">
                 <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
-                
-                <p style="font-size: 0.85rem; font-weight: bold; margin: 10px 0;">اضغط لتأكيد الطلب عبر:</p>
-                <div class="contact-options">
-                    <button class="contact-btn bg-insta" onclick="processOrder('insta')">انستغرام 📸</button>
-                    <button class="contact-btn bg-wa" onclick="processOrder('wa')">واتساب ✅</button>
-                </div>
-
-                <div class="alert-text">
-                    ⚠️ <strong>هام لمستخدمي انستغرام:</strong><br>
-                    سيتم نسخ طلبك تلقائياً. عند فتح الخاص، اضغط ضغطة مطولة في مكان الكتابة واختر <strong>"لصق" (Paste)</strong>.
-                </div>
+                <button class="btn-order" onclick="processOrder()">إرسال عبر انستغرام 📸</button>
             </div>
         </div>
     </div>
 
     <div class="products-grid" id="grid"></div>
 
-    <script>
-        // بيانات التواصل (يرجى تعديل رقم الواتساب بالرقم الحقيقي)
-        const WHATSAPP_NUM = "213XXXXXXXXX"; 
-        const INSTA_USER = "ch_lingerie20"; 
+    <div class="modal-overlay" id="custom-modal">
+        <div class="modal-card">
+            <div class="icon-circle">📸</div>
+            <h2>تم النسخ بنجاح!</h2>
+            <p>لقد قمنا بنسخ تفاصيل طلبكِ تلقائياً. يرجى عمل <b>"لصق" (Paste)</b> في المحادثة عند فتح انستغرام.</p>
+            <button class="modal-btn" onclick="goToInsta()">فتح محادثة انستغرام الآن</button>
+            <button class="close-modal" onclick="closeModal()">إغلاق</button>
+        </div>
+    </div>
 
+    <script>
+        const INSTA_USER = "ch_lingerie20";
         const products = [
             { id: 1,  img: "1",  ar: "خمار موديل 1", price: 3500 },
             { id: 2,  img: "6",  ar: "خمار موديل 2", price: 2500 },
             { id: 3,  img: "9",  ar: "حجاب فلة",    price: 2500 },
-            { id: 4,  img: "10", ar: "بيجامة موديل 1", price: 2200 },
-            { id: 5,  img: "11", ar: "بيجامة موديل 2", price: 1000 },
-            { id: 6,  img: "12", ar: "بيجامة موديل 3", price: 1000 },
-            { id: 7,  img: "13", ar: "ROBE HIJAB",   price: 4200 },
-            { id: 8,  img: "14", ar: "بيجامة موديل 4", price: 1000 },
-            { id: 9,  img: "15", ar: "بيجامة موديل 5", price: 1000 }
+            { id: 4,  img: "10", ar: "بيجامة شتوية", price: 2200 }
         ];
 
         let cart = {};
@@ -119,9 +116,9 @@
             const grid = document.getElementById('grid');
             grid.innerHTML = products.map(p => `
                 <div class="product-card">
-                    <img src="${p.img}.jpg" alt="${p.ar}" onerror="this.src='https://via.placeholder.com/300x400?text=CH'">
+                    <img src="${p.img}.jpg" onerror="this.src='https://via.placeholder.com/200x300?text=CH'">
                     <h3>${p.ar}</h3>
-                    <span class="new-price">${p.price} دج</span>
+                    <span class="price">${p.price} دج</span>
                     <button class="btn-add" onclick="addToCart(${p.id})">أضيفي للسلة</button>
                 </div>
             `).join('');
@@ -136,42 +133,43 @@
 
         function updateUI() {
             const list = document.getElementById('cart-items');
-            const orderSection = document.getElementById('order-section');
             let total = 0; let count = 0;
             list.innerHTML = '';
             for (let id in cart) {
                 const item = cart[id];
                 total += item.price * item.qty; count += item.qty;
-                list.innerHTML += `<div class="cart-item"><div><strong>${item.ar}</strong> <span class="qty-badge">×${item.qty}</span></div><span>${item.price * item.qty} دج</span></div>`;
+                list.innerHTML += `<div class="cart-item"><span>${item.ar} (×${item.qty})</span> <span>${item.price * item.qty} دج</span></div>`;
             }
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
-            orderSection.style.display = count > 0 ? 'block' : 'none';
+            document.getElementById('order-section').style.display = count > 0 ? 'block' : 'none';
         }
 
-        function processOrder(platform) {
+        function processOrder() {
             const n = document.getElementById('cust-name').value;
             const a = document.getElementById('cust-address').value;
             const p = document.getElementById('cust-phone').value;
 
-            if(!n || !a || !p) return alert("يرجى إكمال بياناتك أولاً.");
+            if(!n || !a || !p) return alert("يرجى ملء البيانات أولاً");
 
-            let msg = `طلب جديد من متجر CH_LINGERIE:\n\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلبية:\n`;
+            let msg = `طلب جديد من CH_LINGERIE:\n\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلب:\n`;
             for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
             msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
 
-            if(platform === 'wa') {
-                window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
-            } else {
-                navigator.clipboard.writeText(msg).then(() => {
-                    alert("✅ تم نسخ بيانات طلبك! بمجرد فتح انستغرام، قومي بعمل 'لصق' (Paste) في الخاص.");
-                    // هذا الرابط يفتح الدردشة المباشرة (Direct Message) فوراً
-                    window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
-                });
-            }
+            navigator.clipboard.writeText(msg).then(() => {
+                // إظهار النافذة المنبثقة الاحترافية بدلاً من alert المتصفح
+                document.getElementById('custom-modal').style.display = 'flex';
+            });
         }
 
+        function goToInsta() {
+            window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
+            closeModal();
+        }
+
+        function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
+        
         render();
     </script>
 </body>
