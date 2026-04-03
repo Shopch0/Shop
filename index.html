@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="main-html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CH_LINGERIE | متجر</title>
+    <title>CH_LINGERIE | Store</title>
     <style>
         :root { --main-pink: #d95988; --dark-gray: #333; --light-pink: #fff4f7; --whatsapp: #25D366; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { margin: 0; background-color: #fff; padding-top: 70px; }
-
+        
         /* الهيدر */
         header {
             background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000;
         }
-        .logo { font-size: 1.4rem; font-weight: 900; color: var(--main-pink); }
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.6rem; background: none; border: none; }
+        .nav-controls { display: flex; gap: 15px; align-items: center; }
+        .icon-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; position: relative; }
         .cart-count { position: absolute; top: -5px; right: -10px; background: var(--main-pink); color: white; font-size: 0.7rem; padding: 3px 7px; border-radius: 50%; }
 
         /* السلة الجانبية */
@@ -24,73 +24,68 @@
             background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.1); z-index: 2000;
             padding: 25px; overflow-y: auto;
         }
+        html[dir="ltr"] .cart-sidebar { right: auto; left: -350px; }
         .cart-sidebar.open { right: 0; }
+        html[dir="ltr"] .cart-sidebar.open { left: 0; }
+        
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--light-pink); padding-bottom: 10px; margin-bottom: 20px; }
-        .close-sidebar { background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--main-pink); font-weight: bold; }
+        .close-sidebar { background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--main-pink); }
 
-        /* شبكة المنتجات */
+        /* المنتجات */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 20px 5%; }
         .product-card { background: #fdfdfd; padding: 10px; border-radius: 15px; border: 1px solid #eee; text-align: center; }
         .product-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; }
-        .price { color: var(--main-pink); font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 10px; }
         .btn-add { background: var(--main-pink); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
 
-        /* عناصر السلة */
-        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0; font-size: 0.9rem; }
-        .remove-btn { color: #ff4d4d; background: none; border: none; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
-
-        /* زر التأكيد والحقول */
-        .btn-confirm-start { background: var(--main-pink); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1rem; }
-        #order-details-form { display: none; background: var(--light-pink); padding: 15px; border-radius: 15px; margin-top: 15px; }
-        .order-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; display: block; }
-
+        /* فورم الطلب */
+        .order-form input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
         .contact-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .btn-contact { padding: 12px; border: none; border-radius: 25px; color: white; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
         .bg-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .bg-wa { background: var(--whatsapp); }
 
-        .alert-under-contact { font-size: 0.72rem; color: #d95988; background: #fff; padding: 8px; border-radius: 8px; margin-top: 10px; border: 1px dashed var(--main-pink); text-align: center; }
-
-        /* نافذة الـ Popup (للتنبيهات والنجاح) */
+        /* نافذة Popup الموحدة */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(4px); }
-        .modal-card { background: white; width: 90%; max-width: 330px; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-card { background: white; width: 90%; max-width: 350px; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .modal-btn { background: var(--main-pink); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 15px; cursor: pointer; font-weight: bold; }
-        .modal-btn.secondary { background: #eee; color: #666; }
+
+        /* قائمة اللغات */
+        .lang-menu { position: absolute; top: 60px; left: 5%; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 10px; display: none; flex-direction: column; z-index: 1001; }
+        .lang-menu button { padding: 10px 20px; border: none; background: none; cursor: pointer; text-align: right; width: 100%; }
+        .lang-menu button:hover { background: var(--light-pink); }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">CH LINGERIE</div>
-        <button class="cart-icon" onclick="toggleCart()">🛒 <span class="cart-count" id="cart-count">0</span></button>
+        <div class="nav-controls">
+            <button class="icon-btn" onclick="toggleLangMenu()">🌐</button>
+            <button class="icon-btn" onclick="toggleCart()">🛒 <span class="cart-count" id="cart-count">0</span></button>
+        </div>
+        <div class="lang-menu" id="lang-menu">
+            <button onclick="changeLang('ar')">العربية (AR)</button>
+            <button onclick="changeLang('fr')">Français (FR)</button>
+        </div>
     </header>
 
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="sidebar-header">
-            <h3 style="margin:0;">سلة المشتريات</h3>
+            <h3 id="txt-cart-title">سلة المشتريات</h3>
             <button class="close-sidebar" onclick="toggleCart()">×</button>
         </div>
         <div id="cart-items"></div>
-        
         <div id="order-section" style="display:none;">
-            <p style="font-weight:bold; margin-top:15px; font-size: 1.1rem;">الإجمالي: <span id="cart-total">0</span> دج</p>
-            <button id="confirm-order-btn" class="btn-confirm-start" onclick="showOrderForm()">تأكيد المشتريات ✅</button>
-
-            <div id="order-details-form">
-                <form class="order-form" onsubmit="return false;">
-                    <input type="text" id="cust-name" placeholder="الاسم الكامل (إجباري)">
-                    <input type="text" id="cust-address" placeholder="العنوان بالتفصيل (إجباري)">
-                    <input type="tel" id="cust-phone" placeholder="رقم الهاتف (اختياري - 10 أرقام)" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
-                    
-                    <p style="font-size: 0.75rem; text-align: center; margin-bottom: 5px; font-weight: bold;">إرسال الطلب عبر:</p>
-                    <div class="contact-btns">
-                        <button type="button" class="btn-contact bg-insta" onclick="processOrder('insta')">انستغرام 📸</button>
-                        <button type="button" class="btn-contact bg-wa" onclick="processOrder('wa')">واتساب ✅</button>
-                    </div>
-                    <div class="alert-under-contact">
-                        ⚠️ اضغطي "فتح"، ثم "مراسلة" في انستغرام، واعملي <b>"لصق" (Paste)</b>.
-                    </div>
-                </form>
+            <p style="font-weight:bold; margin-top:15px;"><span id="txt-total-label">الإجمالي</span>: <span id="cart-total">0</span> <span id="txt-currency">دج</span></p>
+            <button id="btn-confirm-order" class="btn-add" style="padding: 15px;" onclick="showOrderForm()">تأكيد المشتريات ✅</button>
+            <div id="order-details-form" style="display:none; margin-top:15px; background:var(--light-pink); padding:15px; border-radius:15px;">
+                <input type="text" id="cust-name" placeholder="الاسم الكامل">
+                <input type="text" id="cust-address" placeholder="العنوان">
+                <input type="tel" id="cust-phone" placeholder="رقم الهاتف (10 أرقام)" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                <div class="contact-btns">
+                    <button class="btn-contact bg-insta" onclick="processOrder('insta')">Instagram</button>
+                    <button class="btn-contact bg-wa" onclick="processOrder('wa')">WhatsApp</button>
+                </div>
             </div>
         </div>
     </div>
@@ -99,42 +94,104 @@
 
     <div class="modal-overlay" id="custom-modal">
         <div class="modal-card">
-            <div id="modal-icon" style="font-size: 3rem; margin-bottom: 10px;"></div>
-            <h2 id="modal-title" style="font-size: 1.2rem; margin: 10px 0;"></h2>
-            <p id="modal-text" style="font-size: 0.9rem; color: #666; line-height: 1.5;"></p>
-            <button class="modal-btn" id="modal-action-btn">حسناً</button>
-            <button class="modal-btn secondary" id="modal-close-btn" onclick="closeModal()">إغلاق</button>
+            <div id="modal-icon" style="font-size: 3rem;"></div>
+            <h2 id="modal-title"></h2>
+            <p id="modal-text"></p>
+            <button class="modal-btn" id="modal-action-btn" onclick="closeModal()">OK</button>
         </div>
     </div>
 
     <script>
-        const WHATSAPP_NUM = "213557764143"; 
+        const WHATSAPP_NUM = "213557764143";
         const INSTA_USER = "ch_lingerie20";
-        
+        let currentLang = 'ar';
+        let cart = {};
+
+        const translations = {
+            ar: {
+                cartTitle: "سلة المشتريات", total: "الإجمالي", currency: "دج", confirm: "تأكيد المشتريات ✅",
+                namePh: "الاسم الكامل (إجباري)", addrPh: "العنوان بالتفصيل (إجباري)", phonePh: "رقم الهاتف (اختياري - 10 أرقام)",
+                addBtn: "أضيفي للسلة", errTitle: "بيانات ناقصة!", errMsg: "يرجى ملء خانة الاسم والعنوان.",
+                phoneErr: "يجب أن يتكون رقم الهاتف من 10 أرقام.", successTitle: "تم النسخ بنجاح! ✨",
+                successMsg: "تم نسخ طلبكِ. يرجى عمل 'لصق' في المحادثة.", ok: "حسناً"
+            },
+            fr: {
+                cartTitle: "Mon Panier", total: "Total", currency: "DZD", confirm: "Confirmer la commande ✅",
+                namePh: "Nom complet (Obligatoire)", addrPh: "Adresse détaillée (Obligatoire)", phonePh: "Téléphone (Optionnel - 10 chiffres)",
+                addBtn: "Ajouter au panier", errTitle: "Données manquantes!", errMsg: "Veuillez remplir le nom et l'adresse.",
+                phoneErr: "Le numéro doit comporter 10 chiffres.", successTitle: "Copié avec succès! ✨",
+                successMsg: "Votre commande est copiée. Veuillez faire 'Coller' dans la discussion.", ok: "D'accord"
+            }
+        };
+
         const products = [
-            { id: 1,  img: "1",  ar: "خمار موديل 1", price: 3500 },
-            { id: 2,  img: "6",  ar: "خمار موديل 2", price: 2500 },
-            { id: 3,  img: "9",  ar: "حجاب فلة",    price: 2500 },
-            { id: 4,  img: "10", ar: "بيجامة شتوية", price: 2200 },
-            { id: 5,  img: "11", ar: "بيجامة موديل 2", price: 1000 },
-            { id: 6,  img: "12", ar: "بيجامة موديل 3", price: 1000 },
-            { id: 7,  img: "13", ar: "ROBE HIJAB",   price: 4200 },
-            { id: 8,  img: "14", ar: "بيجامة موديل 4", price: 1000 },
-            { id: 9,  img: "15", ar: "بيجامة موديل 5", price: 1000 }
+            { id: 1, img: "1", ar: "خمار موديل 1", fr: "Hijab Modèle 1", price: 3500 },
+            { id: 2, img: "6", ar: "خمار موديل 2", fr: "Hijab Modèle 2", price: 2500 },
+            { id: 3, img: "9", ar: "حجاب فلة", fr: "Hijab Fella", price: 2500 }
         ];
 
-        let cart = {};
+        function changeLang(lang) {
+            currentLang = lang;
+            const html = document.getElementById('main-html');
+            html.lang = lang;
+            html.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.getElementById('txt-cart-title').innerText = translations[lang].cartTitle;
+            document.getElementById('txt-total-label').innerText = translations[lang].total;
+            document.getElementById('txt-currency').innerText = translations[lang].currency;
+            document.getElementById('btn-confirm-order').innerText = translations[lang].confirm;
+            document.getElementById('cust-name').placeholder = translations[lang].namePh;
+            document.getElementById('cust-address').placeholder = translations[lang].addrPh;
+            document.getElementById('cust-phone').placeholder = translations[lang].phonePh;
+            
+            toggleLangMenu();
+            render();
+            updateUI();
+        }
 
         function render() {
             const grid = document.getElementById('grid');
             grid.innerHTML = products.map(p => `
                 <div class="product-card">
-                    <img src="${p.img}.jpg" onerror="this.src='https://via.placeholder.com/200x300?text=CH'">
-                    <h3>${p.ar}</h3>
-                    <span class="price">${p.price} دج</span>
-                    <button class="btn-add" onclick="addToCart(${p.id})">أضيفي للسلة</button>
+                    <img src="${p.img}.jpg" onerror="this.src='https://via.placeholder.com/200x300'">
+                    <h3>${currentLang === 'ar' ? p.ar : p.fr}</h3>
+                    <p style="color:var(--main-pink); font-weight:bold;">${p.price} ${translations[currentLang].currency}</p>
+                    <button class="btn-add" onclick="addToCart(${p.id})">${translations[currentLang].addBtn}</button>
                 </div>
             `).join('');
+        }
+
+        function showPopup(title, text, icon, actionFn = null) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-text').innerText = text;
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('modal-action-btn').innerText = translations[currentLang].ok;
+            document.getElementById('modal-action-btn').onclick = () => { closeModal(); if(actionFn) actionFn(); };
+            document.getElementById('custom-modal').style.display = 'flex';
+        }
+
+        function processOrder(platform) {
+            const n = document.getElementById('cust-name').value;
+            const a = document.getElementById('cust-address').value;
+            const p = document.getElementById('cust-phone').value;
+            const t = translations[currentLang];
+
+            if(!n || !a) return showPopup(t.errTitle, t.errMsg, "⚠️");
+            if(p !== "" && p.length < 10) return showPopup(t.errTitle, t.phoneErr, "📞");
+
+            let msg = `Commande de CH_LINGERIE:\n👤 Client: ${n}\n📍 Adresse: ${a}\n📞 Tel: ${p || '/'}\n\n📦 Articles:\n`;
+            for (let id in cart) msg += `- ${currentLang === 'ar' ? cart[id].ar : cart[id].fr} (x${cart[id].qty})\n`;
+            msg += `\n💰 Total: ${document.getElementById('cart-total').innerText} ${t.currency}`;
+
+            navigator.clipboard.writeText(msg).then(() => {
+                showPopup(t.successTitle, t.successMsg, "✅", () => {
+                    if(platform === 'wa') window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
+                    else {
+                        window.location.href = `instagram://user?username=${INSTA_USER}`;
+                        setTimeout(() => window.open(`https://www.instagram.com/${INSTA_USER}`, "_blank"), 500);
+                    }
+                });
+            });
         }
 
         function addToCart(id) {
@@ -142,93 +199,26 @@
             else { const p = products.find(i => i.id === id); cart[id] = { ...p, qty: 1 }; }
             updateUI();
         }
-
-        function removeFromCart(id) { delete cart[id]; updateUI(); }
-
         function updateUI() {
             const list = document.getElementById('cart-items');
-            let total = 0; let count = 0;
+            let total = 0, count = 0;
             list.innerHTML = '';
             for (let id in cart) {
                 const item = cart[id];
                 total += item.price * item.qty; count += item.qty;
-                list.innerHTML += `<div class="cart-item"><span>${item.ar} (×${item.qty})</span><div><span style="font-weight:bold; margin-left:10px;">${item.price * item.qty} دج</span><button class="remove-btn" onclick="removeFromCart(${id})">×</button></div></div>`;
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee;">
+                    <span>${currentLang === 'ar' ? item.ar : item.fr} (x${item.qty})</span>
+                    <button onclick="delete cart[${id}]; updateUI();" style="color:red; background:none; border:none; cursor:pointer;">×</button>
+                </div>`;
             }
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
             document.getElementById('order-section').style.display = count > 0 ? 'block' : 'none';
-            if(count === 0) resetOrderForm();
         }
-
-        function showOrderForm() {
-            document.getElementById('confirm-order-btn').style.display = 'none';
-            document.getElementById('order-details-form').style.display = 'block';
-        }
-
-        function resetOrderForm() {
-            document.getElementById('confirm-order-btn').style.display = 'block';
-            document.getElementById('order-details-form').style.display = 'none';
-        }
-
-        // دالة الـ Popup الموحدة بديلة الـ Alert
-        function showPopup(title, text, icon, actionText, actionFn) {
-            const modal = document.getElementById('custom-modal');
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-text').innerText = text;
-            document.getElementById('modal-icon').innerText = icon;
-            const actionBtn = document.getElementById('modal-action-btn');
-            
-            actionBtn.innerText = actionText;
-            actionBtn.onclick = () => {
-                if (actionFn) actionFn();
-                closeModal();
-            };
-            modal.style.display = 'flex';
-        }
-
-        function processOrder(platform) {
-            const n = document.getElementById('cust-name').value;
-            const a = document.getElementById('cust-address').value;
-            const p = document.getElementById('cust-phone').value;
-
-            // استبدال الـ Alert بـ Popup داخلي للخطأ
-            if(!n || !a) {
-                showPopup("بيانات ناقصة!", "يرجى ملء خانة الاسم والعنوان لإتمام طلبكِ.", "🌸", "حسناً جاري الملء", null);
-                return;
-            }
-            
-            if(p !== "" && p.length < 10) {
-                showPopup("رقم الهاتف غير صحيح", "يجب أن يتكون رقم الهاتف من 10 أرقام إذا رغبتِ في إضافته.", "📞", "تعديل الرقم", null);
-                return;
-            }
-
-            let msg = `طلب جديد من CH_LINGERIE:\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p || 'غير مزود'}\n\n📦 المنتجات:\n`;
-            for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
-            msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
-
-            navigator.clipboard.writeText(msg).then(() => {
-                // استبدال الـ Alert بـ Popup داخلي للنجاح
-                const successAction = () => {
-                    if(platform === 'wa') {
-                        window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
-                    } else {
-                        window.location.href = `instagram://user?username=${INSTA_USER}`;
-                        setTimeout(() => { window.open(`https://www.instagram.com/${INSTA_USER}`, "_blank"); }, 500);
-                    }
-                };
-
-                showPopup(
-                    "تم نسخ الطلب! ✨", 
-                    "تم نسخ بيانات طلبكِ بنجاح. سنفتح التطبيق الآن، يرجى الضغط على 'لصق' في المحادثة لإرساله.", 
-                    "✅", 
-                    "فتح التطبيق الآن", 
-                    successAction
-                );
-            });
-        }
-
-        function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
+        function toggleLangMenu() { const m = document.getElementById('lang-menu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
+        function showOrderForm() { document.getElementById('btn-confirm-order').style.display = 'none'; document.getElementById('order-details-form').style.display = 'block'; }
+        function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
         render();
     </script>
 </body>
