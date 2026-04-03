@@ -9,7 +9,6 @@
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { margin: 0; background-color: #fff; padding-top: 70px; }
 
-        /* الهيدر */
         header {
             background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000;
@@ -25,22 +24,26 @@
             padding: 25px; overflow-y: auto;
         }
         .cart-sidebar.open { right: 0; }
-        .cart-sidebar h3 { border-bottom: 2px solid var(--light-pink); padding-bottom: 10px; margin-bottom: 20px; }
-
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--light-pink); padding-bottom: 10px; margin-bottom: 20px; }
+        
         /* المنتجات */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 20px 5%; }
         .product-card { background: #fdfdfd; padding: 10px; border-radius: 15px; border: 1px solid #eee; text-align: center; }
         .product-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; }
-        .product-card h3 { font-size: 0.95rem; margin: 10px 0; color: var(--dark-gray); }
         .price { color: var(--main-pink); font-weight: bold; font-size: 1.1rem; display: block; margin-bottom: 10px; }
         .btn-add { background: var(--main-pink); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
+
+        /* ستايل المنتجات داخل السلة مع زر الحذف */
+        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0; font-size: 0.9rem; }
+        .remove-btn { color: #ff4d4d; background: none; border: none; font-size: 1.2rem; cursor: pointer; font-weight: bold; padding: 0 5px; }
+        .remove-btn:hover { color: #cc0000; transform: scale(1.2); }
 
         /* فورم البيانات */
         .order-form { margin-top: 20px; background: var(--light-pink); padding: 15px; border-radius: 15px; }
         .order-form input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
         .btn-order { background: var(--main-pink); color: white; border: none; padding: 12px; border-radius: 25px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 5px; }
 
-        /* النافذة المنبثقة الاحترافية (Custom Modal) */
+        /* النافذة المنبثقة الاحترافية */
         .modal-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 3000;
@@ -48,24 +51,13 @@
         }
         .modal-card {
             background: white; width: 90%; max-width: 350px; padding: 30px; border-radius: 20px; text-align: center;
-            position: relative; animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            position: relative; animation: popIn 0.3s ease-out;
         }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes popIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        .modal-card .icon-circle {
-            width: 70px; height: 70px; background: var(--light-pink); color: var(--main-pink);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 2.5rem; margin: 0 auto 20px;
-        }
-        .modal-card h2 { margin: 0 0 10px; color: var(--dark-gray); font-size: 1.2rem; }
-        .modal-card p { font-size: 0.9rem; color: #666; line-height: 1.5; margin-bottom: 25px; }
-        .modal-btn {
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%;
-        }
-        .close-modal { margin-top: 15px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem; text-decoration: underline; }
-
-        .cart-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; font-size: 0.85rem; }
+        .modal-card .icon-circle { width: 60px; height: 60px; background: var(--light-pink); color: var(--main-pink); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 15px; }
+        .modal-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+        .close-modal { margin-top: 15px; background: none; border: none; color: #999; cursor: pointer; font-size: 0.8rem; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -76,15 +68,19 @@
     </header>
 
     <div class="cart-sidebar" id="cart-sidebar">
-        <h3>مشترياتكِ</h3>
+        <div class="sidebar-header">
+            <h3 style="margin:0;">طلباتكِ المختارة</h3>
+            <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">×</button>
+        </div>
         <div id="cart-items"></div>
+        
         <div id="order-section" style="display:none;">
-            <p style="font-weight:bold; margin-top:15px;">الإجمالي: <span id="cart-total">0</span> دج</p>
+            <p style="font-weight:bold; margin-top:15px; font-size: 1.1rem;">الإجمالي: <span id="cart-total">0</span> دج</p>
             <div class="order-form">
                 <input type="text" id="cust-name" placeholder="الاسم الكامل">
-                <input type="text" id="cust-address" placeholder="الولاية / البلدية">
+                <input type="text" id="cust-address" placeholder="الولاية والبلدية">
                 <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
-                <button class="btn-order" onclick="processOrder()">إرسال عبر انستغرام 📸</button>
+                <button class="btn-order" onclick="processOrder()">إرسال الطلب عبر انستغرام 📸</button>
             </div>
         </div>
     </div>
@@ -93,10 +89,10 @@
 
     <div class="modal-overlay" id="custom-modal">
         <div class="modal-card">
-            <div class="icon-circle">📸</div>
-            <h2>تم النسخ بنجاح!</h2>
-            <p>لقد قمنا بنسخ تفاصيل طلبكِ تلقائياً. يرجى عمل <b>"لصق" (Paste)</b> في المحادثة عند فتح انستغرام.</p>
-            <button class="modal-btn" onclick="goToInsta()">فتح محادثة انستغرام الآن</button>
+            <div class="icon-circle">✅</div>
+            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">تم نسخ البيانات!</h2>
+            <p style="font-size: 0.85rem; color: #555;">قومي بعمل <b>"لصق" (Paste)</b> في المحادثة عند فتح انستغرام لإرسال طلبكِ.</p>
+            <button class="modal-btn" onclick="goToInsta()">فتح انستغرام الآن</button>
             <button class="close-modal" onclick="closeModal()">إغلاق</button>
         </div>
     </div>
@@ -107,7 +103,12 @@
             { id: 1,  img: "1",  ar: "خمار موديل 1", price: 3500 },
             { id: 2,  img: "6",  ar: "خمار موديل 2", price: 2500 },
             { id: 3,  img: "9",  ar: "حجاب فلة",    price: 2500 },
-            { id: 4,  img: "10", ar: "بيجامة شتوية", price: 2200 }
+            { id: 4,  img: "10", ar: "بيجامة شتوية", price: 2200 },
+            { id: 5,  img: "11", ar: "بيجامة موديل 2", price: 1000 },
+            { id: 6,  img: "12", ar: "بيجامة موديل 3", price: 1000 },
+            { id: 7,  img: "13", ar: "ROBE HIJAB",   price: 4200 },
+            { id: 8,  img: "14", ar: "بيجامة موديل 4", price: 1000 },
+            { id: 9,  img: "15", ar: "بيجامة موديل 5", price: 1000 }
         ];
 
         let cart = {};
@@ -131,6 +132,12 @@
             document.getElementById('cart-sidebar').classList.add('open');
         }
 
+        // دالة حذف منتج من السلة
+        function removeFromCart(id) {
+            delete cart[id];
+            updateUI();
+        }
+
         function updateUI() {
             const list = document.getElementById('cart-items');
             let total = 0; let count = 0;
@@ -138,7 +145,14 @@
             for (let id in cart) {
                 const item = cart[id];
                 total += item.price * item.qty; count += item.qty;
-                list.innerHTML += `<div class="cart-item"><span>${item.ar} (×${item.qty})</span> <span>${item.price * item.qty} دج</span></div>`;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <div><strong>${item.ar}</strong> <small>(×${item.qty})</small></div>
+                        <div style="display:flex; align-items:center;">
+                            <span style="font-weight:bold; margin-left:10px;">${item.price * item.qty} دج</span>
+                            <button class="remove-btn" onclick="removeFromCart(${id})">×</button>
+                        </div>
+                    </div>`;
             }
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
@@ -149,27 +163,20 @@
             const n = document.getElementById('cust-name').value;
             const a = document.getElementById('cust-address').value;
             const p = document.getElementById('cust-phone').value;
+            if(!n || !a || !p) return alert("يرجى ملء بياناتكِ أولاً");
 
-            if(!n || !a || !p) return alert("يرجى ملء البيانات أولاً");
-
-            let msg = `طلب جديد من CH_LINGERIE:\n\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلب:\n`;
+            let msg = `طلب جديد من CH_LINGERIE:\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلب:\n`;
             for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
             msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
 
             navigator.clipboard.writeText(msg).then(() => {
-                // إظهار النافذة المنبثقة الاحترافية بدلاً من alert المتصفح
                 document.getElementById('custom-modal').style.display = 'flex';
             });
         }
 
-        function goToInsta() {
-            window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
-            closeModal();
-        }
-
+        function goToInsta() { window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank"); closeModal(); }
         function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
-        
         render();
     </script>
 </body>
