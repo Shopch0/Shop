@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CH_LINGERIE | متجر</title>
     <style>
-        :root { --main-pink: #d95988; --dark-gray: #333; --light-pink: #fff4f7; --gold: #b89060; --whatsapp: #25D366; }
+        :root { --main-pink: #d95988; --dark-gray: #333; --light-pink: #fff4f7; --whatsapp: #25D366; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { margin: 0; background-color: #fff; padding-top: 70px; }
 
+        /* الهيدر */
         header {
             background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000;
         }
-        .logo { font-size: 1.4rem; font-weight: 900; color: var(--main-pink); letter-spacing: 1px; }
+        .logo { font-size: 1.4rem; font-weight: 900; color: var(--main-pink); }
         .cart-icon { position: relative; cursor: pointer; font-size: 1.6rem; background: none; border: none; }
         .cart-count { position: absolute; top: -5px; right: -10px; background: var(--main-pink); color: white; font-size: 0.7rem; padding: 3px 7px; border-radius: 50%; }
 
@@ -25,7 +26,8 @@
         }
         .cart-sidebar.open { right: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--light-pink); padding-bottom: 10px; margin-bottom: 20px; }
-        
+        .close-sidebar { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #999; }
+
         /* المنتجات */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 20px 5%; }
         .product-card { background: #fdfdfd; padding: 10px; border-radius: 15px; border: 1px solid #eee; text-align: center; }
@@ -35,26 +37,23 @@
 
         /* عناصر السلة */
         .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0; font-size: 0.9rem; }
-        .remove-btn { color: #ff4d4d; background: none; border: none; font-size: 1.2rem; cursor: pointer; font-weight: bold; }
+        .remove-btn { color: #ff4d4d; background: none; border: none; font-size: 1.2rem; cursor: pointer; font-weight: bold; margin-left: 5px; }
 
-        /* قسم ملأ البيانات (مخفي في البداية) */
-        #order-details-form { display: none; background: var(--light-pink); padding: 15px; border-radius: 15px; margin-top: 15px; animation: slideDown 0.4s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .order-form input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-        
         /* زر التأكيد الأولي */
         .btn-confirm-start { background: var(--main-pink); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1rem; }
 
-        /* أزرار التواصل */
+        /* قسم ملأ البيانات (مخفي) */
+        #order-details-form { display: none; background: var(--light-pink); padding: 15px; border-radius: 15px; margin-top: 15px; }
+        .order-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
+        
         .contact-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .btn-contact { padding: 12px; border: none; border-radius: 25px; color: white; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
         .bg-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .bg-wa { background: var(--whatsapp); }
 
-        /* المودال (النافذة المنبثقة) */
+        /* النافذة المنبثقة */
         .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(4px); }
-        .modal-card { background: white; width: 90%; max-width: 350px; padding: 30px; border-radius: 20px; text-align: center; }
+        .modal-card { background: white; width: 90%; max-width: 330px; padding: 30px; border-radius: 20px; text-align: center; }
         .modal-btn { background: #333; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 15px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
@@ -68,21 +67,21 @@
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="sidebar-header">
             <h3 style="margin:0;">سلة المشتريات</h3>
-            <button onclick="toggleCart()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">×</button>
+            <button class="close-sidebar" onclick="toggleCart()">×</button>
         </div>
         <div id="cart-items"></div>
         
         <div id="order-section" style="display:none;">
-            <p style="font-weight:bold; margin-top:15px; font-size: 1.1rem;">الإجمالي: <span id="cart-total">0</span> دج</p>
+            <p style="font-weight:bold; margin-top:15px;">الإجمالي: <span id="cart-total">0</span> دج</p>
             
             <button id="confirm-order-btn" class="btn-confirm-start" onclick="showOrderForm()">تأكيد المشتريات ✅</button>
 
             <div id="order-details-form">
                 <div class="order-form">
                     <input type="text" id="cust-name" placeholder="الاسم الكامل">
-                    <input type="text" id="cust-address" placeholder="الولاية والبلدية">
+                    <input type="text" id="cust-address" placeholder="العنوان بالتفصيل">
                     <input type="tel" id="cust-phone" placeholder="رقم الهاتف">
-                    <p style="font-size: 0.75rem; text-align: center; margin-bottom: 10px; font-weight: bold;">أكملي الطلب عبر:</p>
+                    <p style="font-size: 0.7rem; text-align: center; margin: 10px 0;">إرسال الطلبية عبر:</p>
                     <div class="contact-btns">
                         <button class="btn-contact bg-insta" onclick="processOrder('insta')">انستغرام 📸</button>
                         <button class="btn-contact bg-wa" onclick="processOrder('wa')">واتساب ✅</button>
@@ -96,10 +95,11 @@
 
     <div class="modal-overlay" id="custom-modal">
         <div class="modal-card">
-            <div style="font-size: 3rem; margin-bottom: 10px;">✨</div>
-            <h2 id="modal-title">تم النسخ!</h2>
-            <p id="modal-text">يرجى عمل "لصق" عند فتح التطبيق.</p>
+            <div style="font-size: 2.5rem;">✨</div>
+            <h2 id="modal-title" style="font-size: 1.1rem; margin: 10px 0;">تم نسخ الطلب!</h2>
+            <p id="modal-text" style="font-size: 0.85rem; color: #666;">يرجى عمل "لصق" عند فتح التطبيق.</p>
             <button class="modal-btn" id="modal-action-btn">فتح التطبيق الآن</button>
+            <button style="background:none; border:none; color:#aaa; margin-top:10px; cursor:pointer;" onclick="closeModal()">إغلاق</button>
         </div>
     </div>
 
@@ -140,7 +140,10 @@
             document.getElementById('cart-sidebar').classList.add('open');
         }
 
-        function removeFromCart(id) { delete cart[id]; updateUI(); }
+        function removeFromCart(id) {
+            delete cart[id];
+            updateUI();
+        }
 
         function updateUI() {
             const list = document.getElementById('cart-items');
@@ -149,27 +152,26 @@
             for (let id in cart) {
                 const item = cart[id];
                 total += item.price * item.qty; count += item.qty;
-                list.innerHTML += `<div class="cart-item"><span>${item.ar} (×${item.qty})</span><div><span style="font-weight:bold; margin-left:10px;">${item.price * item.qty} دج</span><button class="remove-btn" onclick="removeFromCart(${id})">×</button></div></div>`;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.ar} (×${item.qty})</span>
+                        <div>
+                            <span style="font-weight:bold; margin-left:10px;">${item.price * item.qty} دج</span>
+                            <button class="remove-btn" onclick="removeFromCart(${id})">×</button>
+                        </div>
+                    </div>`;
             }
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
-            
-            const orderSection = document.getElementById('order-section');
-            if(count > 0) {
-                orderSection.style.display = 'block';
-            } else {
-                orderSection.style.display = 'none';
-                resetOrderForm(); // إعادة إخفاء الفورم إذا أصبحت السلة فارغة
-            }
+            document.getElementById('order-section').style.display = count > 0 ? 'block' : 'none';
+            if(count === 0) resetOrderForm();
         }
 
-        // إظهار حقول البيانات عند الضغط على تأكيد
         function showOrderForm() {
             document.getElementById('confirm-order-btn').style.display = 'none';
             document.getElementById('order-details-form').style.display = 'block';
         }
 
-        // إعادة ضبط السلة للحالة الأولية
         function resetOrderForm() {
             document.getElementById('confirm-order-btn').style.display = 'block';
             document.getElementById('order-details-form').style.display = 'none';
@@ -179,9 +181,9 @@
             const n = document.getElementById('cust-name').value;
             const a = document.getElementById('cust-address').value;
             const p = document.getElementById('cust-phone').value;
-            if(!n || !a || !p) return alert("يرجى ملء بياناتكِ أولاً لإتمام الطلب.");
+            if(!n || !a || !p) return alert("يرجى إدخال بياناتكِ أولاً");
 
-            let msg = `طلب جديد من CH_LINGERIE:\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 المنتجات:\n`;
+            let msg = `طلب جديد من CH_LINGERIE:\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلبية:\n`;
             for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
             msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
 
@@ -192,22 +194,18 @@
                 
                 if(platform === 'wa') {
                     document.getElementById('modal-title').innerText = "جاهز للإرسال ✅";
-                    document.getElementById('modal-text').innerText = "تم نسخ الطلب! سنفتح لكِ واتساب الآن.";
                     btn.className = "modal-btn bg-wa";
                     btn.onclick = () => window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
                 } else {
                     document.getElementById('modal-title').innerText = "تم النسخ بنجاح! 📸";
-                    document.getElementById('modal-text').innerText = "اضغطي 'لصق' (Paste) عند فتح محادثة انستغرام.";
                     btn.className = "modal-btn bg-insta";
                     btn.onclick = () => window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
                 }
             });
         }
 
-        function toggleCart() { 
-            document.getElementById('cart-sidebar').classList.toggle('open'); 
-        }
-
+        function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
+        function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
         render();
     </script>
 </body>
