@@ -37,9 +37,7 @@
 
         .btn-confirm-start { background: var(--main-pink); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1rem; }
         #order-details-form { display: none; background: var(--light-pink); padding: 15px; border-radius: 15px; margin-top: 15px; }
-        
         .order-form input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; display: block; }
-        .order-form input:invalid { border-color: #ffbaba; }
 
         .contact-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .btn-contact { padding: 12px; border: none; border-radius: 25px; color: white; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
@@ -69,25 +67,21 @@
         
         <div id="order-section" style="display:none;">
             <p style="font-weight:bold; margin-top:15px; font-size: 1.1rem;">الإجمالي: <span id="cart-total">0</span> دج</p>
-            
             <button id="confirm-order-btn" class="btn-confirm-start" onclick="showOrderForm()">تأكيد المشتريات ✅</button>
 
             <div id="order-details-form">
-                <form class="order-form" id="main-form" onsubmit="return false;">
+                <form class="order-form" onsubmit="return false;">
                     <input type="text" id="cust-name" placeholder="الاسم الكامل (إجباري)" required>
                     <input type="text" id="cust-address" placeholder="العنوان بالتفصيل (إجباري)" required>
-                    <input type="tel" id="cust-phone" placeholder="رقم الهاتف (10 أرقام)" 
-                           required maxlength="10" pattern="[0-9]{10}" 
-                           oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                    <input type="tel" id="cust-phone" placeholder="رقم الهاتف (اختياري - 10 أرقام)" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                     
                     <p style="font-size: 0.75rem; text-align: center; margin-bottom: 5px; font-weight: bold;">إرسال الطلب عبر:</p>
                     <div class="contact-btns">
                         <button type="button" class="btn-contact bg-insta" onclick="processOrder('insta')">انستغرام 📸</button>
                         <button type="button" class="btn-contact bg-wa" onclick="processOrder('wa')">واتساب ✅</button>
                     </div>
-
                     <div class="alert-under-contact">
-                        ⚠️ بمجرد الضغط، سيتم نسخ معلومات طلبكِ. يرجى عمل <b>"لصق" (Paste)</b> في المحادثة لإرسال الطلب.
+                        ⚠️ اضغطي "فتح"، ثم "مراسلة" في انستغرام، واعملي <b>"لصق" (Paste)</b>.
                     </div>
                 </form>
             </div>
@@ -100,7 +94,7 @@
         <div class="modal-card">
             <div style="font-size: 2.5rem;">✨</div>
             <h2 id="modal-title" style="font-size: 1.1rem; margin: 10px 0;">تم النسخ!</h2>
-            <p id="modal-text" style="font-size: 0.85rem; color: #666;">يرجى عمل "لصق" عند فتح التطبيق.</p>
+            <p id="modal-text" style="font-size: 0.85rem; color: #666;">يرجى عمل "لصق" في المحادثة لإرسال طلبكِ.</p>
             <button class="modal-btn" id="modal-action-btn">فتح التطبيق الآن</button>
             <button style="background:none; border:none; color:#aaa; margin-top:10px; cursor:pointer;" onclick="closeModal()">إغلاق</button>
         </div>
@@ -140,7 +134,6 @@
             if (cart[id]) cart[id].qty++;
             else { const p = products.find(i => i.id === id); cart[id] = { ...p, qty: 1 }; }
             updateUI();
-            document.getElementById('cart-sidebar').classList.add('open');
         }
 
         function removeFromCart(id) { delete cart[id]; updateUI(); }
@@ -171,21 +164,23 @@
         }
 
         function processOrder(platform) {
-            const n = document.getElementById('cust-name');
-            const a = document.getElementById('cust-address');
-            const p = document.getElementById('cust-phone');
+            const n = document.getElementById('cust-name').value;
+            const a = document.getElementById('cust-address').value;
+            const p = document.getElementById('cust-phone').value;
 
-            // التحقق من صحة البيانات وإجبارية الملأ
-            if(!n.value || !a.value || !p.value) {
-                alert("يرجى ملء جميع الحقول الإجبارية أولاً.");
+            // التحقق من البيانات الإجبارية
+            if(!n || !a) {
+                alert("يرجى ملء الاسم والعنوان.");
                 return;
             }
-            if(p.value.length < 10) {
-                alert("يجب أن يتكون رقم الهاتف من 10 أرقام.");
+            
+            // شرط رقم الهاتف: إذا تم إدخاله، يجب أن يكون 10 أرقام
+            if(p !== "" && p.length < 10) {
+                alert("إذا أردتِ إضافة رقم الهاتف، يجب أن يتكون من 10 أرقام.");
                 return;
             }
 
-            let msg = `طلب جديد من CH_LINGERIE:\n👤 الاسم: ${n.value}\n📍 العنوان: ${a.value}\n📞 الهاتف: ${p.value}\n\n📦 المنتجات:\n`;
+            let msg = `طلب جديد من CH_LINGERIE:\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p || 'غير مزود'}\n\n📦 المنتجات:\n`;
             for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
             msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
 
@@ -195,13 +190,16 @@
                 modal.style.display = 'flex';
                 
                 if(platform === 'wa') {
-                    document.getElementById('modal-title').innerText = "تم النسخ بنجاح! ✅";
                     btn.className = "modal-btn bg-wa";
                     btn.onclick = () => window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
                 } else {
-                    document.getElementById('modal-title').innerText = "تم النسخ بنجاح! 📸";
                     btn.className = "modal-btn bg-insta";
-                    btn.onclick = () => window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
+                    btn.onclick = () => {
+                        window.location.href = `instagram://user?username=${INSTA_USER}`;
+                        setTimeout(() => {
+                           window.open(`https://www.instagram.com/${INSTA_USER}`, "_blank");
+                        }, 500);
+                    };
                 }
             });
         }
