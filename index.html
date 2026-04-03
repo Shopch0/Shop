@@ -5,42 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CH_LINGERIE | Store</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Clicker+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --main-pink: #d95988; /* الوردي الغامق للأزرار */
-            --light-pink-logo: #ffb6c1; /* الوردي الفاتح الجديد للوجو */
-            --dark-gray: #333; 
+            --main-pink: #d95988; 
+            --soft-pink-logo: #ffc0cb; /* وردي فاتح ناعم */
             --light-pink-bg: #fff4f7; 
             --whatsapp: #25D366; 
         }
         
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { margin: 0; background-color: #fff; padding-top: 80px; }
         
-        body { margin: 0; background-color: #fff; padding-top: 110px; /* زيادة الحشوة العلوية لأن الوجو أصبح أكبر */ }
-        
-        /* الهيدر */
         header {
             background: #fff; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000;
         }
         
-        /* تصميم اللوجو الجديد والمزخرف */
+        /* تصميم اللوجو الجديد: سطر واحد، خط أنيق، وردي فاتح */
         .logo { 
-            font-family: 'Clicker Script', cursive; /* الخط المزخرف */
-            font-size: 3rem; /* حجم أكبر */
-            color: var(--light-pink-logo); /* لون وردي فاتح */
-            font-weight: normal; /* الخط المزخرف لا يحتاج لثقل كبير */
-            margin: 0;
-            line-height: 1;
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.8rem; /* حجم متناسق */
+            color: var(--soft-pink-logo);
+            white-space: nowrap; /* لضمان بقائه في سطر واحد */
+            letter-spacing: 1px;
+            font-style: italic;
         }
         
         .nav-controls { display: flex; gap: 15px; align-items: center; }
-        .icon-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; position: relative; }
-        .cart-count { position: absolute; top: -5px; right: -10px; background: var(--main-pink); color: white; font-size: 0.7rem; padding: 3px 7px; border-radius: 50%; }
+        .icon-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; position: relative; }
+        .cart-count { position: absolute; top: -5px; right: -10px; background: var(--main-pink); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; }
 
-        /* السلة الجانبية */
         .cart-sidebar {
             position: fixed; top: 0; right: -350px; width: 320px; height: 100%;
             background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.1); z-index: 2000;
@@ -50,140 +46,91 @@
         .cart-sidebar.open { right: 0; }
         html[dir="ltr"] .cart-sidebar.open { left: 0; }
         
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--light-pink-bg); padding-bottom: 10px; margin-bottom: 20px; }
-        .close-sidebar { background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--main-pink); }
-
-        /* شبكة المنتجات */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 20px 5%; }
         .product-card { background: #fdfdfd; padding: 10px; border-radius: 15px; border: 1px solid #eee; text-align: center; }
         .product-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; cursor: pointer; }
         .btn-add { background: var(--main-pink); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; }
 
-        /* نافذة التنبيهات (Popup) */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(4px); }
-        .modal-card { background: white; width: 90%; max-width: 350px; padding: 25px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .modal-btn { background: var(--main-pink); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 15px; cursor: pointer; font-weight: bold; }
-
-        /* نافذة تكبير الصورة */
         .image-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 4000; }
-        .image-viewer img { max-width: 90%; max-height: 85%; border-radius: 10px; border: 3px solid white; }
-        .close-viewer { position: absolute; top: 20px; right: 20px; color: white; font-size: 3rem; cursor: pointer; font-weight: bold; }
+        .image-viewer img { max-width: 90%; max-height: 85%; border-radius: 10px; border: 2px solid white; }
 
-        .lang-menu { position: absolute; top: 70px; left: 5%; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 10px; display: none; flex-direction: column; z-index: 1001; }
+        .lang-menu { position: absolute; top: 60px; left: 5%; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 10px; display: none; flex-direction: column; z-index: 1001; }
         html[dir="ltr"] .lang-menu { left: auto; right: 5%; }
-        .lang-menu button { padding: 12px 25px; border: none; background: none; cursor: pointer; text-align: center; width: 100%; border-bottom: 1px solid #eee; }
-        .lang-menu button:last-child { border-bottom: none; }
+        .lang-menu button { padding: 12px 25px; border: none; background: none; cursor: pointer; width: 100%; border-bottom: 1px solid #eee; }
+
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(4px); }
+        .modal-card { background: white; width: 85%; max-width: 320px; padding: 25px; border-radius: 20px; text-align: center; }
+        .modal-btn { background: var(--main-pink); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">CH LINGERIE</div>
+        <div class="logo">CH Lingerie</div>
         <div class="nav-controls">
             <button class="icon-btn" onclick="toggleLangMenu()">🌐</button>
             <button class="icon-btn" onclick="toggleCart()">🛒 <span class="cart-count" id="cart-count">0</span></button>
         </div>
         <div class="lang-menu" id="lang-menu">
-            <button onclick="changeLang('ar')">العربية (AR)</button>
-            <button onclick="changeLang('fr')">Français (FR)</button>
+            <button onclick="changeLang('ar')">العربية</button>
+            <button onclick="changeLang('fr')">Français</button>
         </div>
     </header>
 
     <div class="cart-sidebar" id="cart-sidebar">
-        <div class="sidebar-header">
-            <h3 id="txt-cart-title">سلة المشتريات</h3>
-            <button class="close-sidebar" onclick="toggleCart()">×</button>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 id="txt-cart-title">السلة</h3>
+            <button onclick="toggleCart()" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
         </div>
         <div id="cart-items"></div>
         <div id="order-section" style="display:none;">
-            <p style="font-weight:bold; margin-top:15px;"><span id="txt-total-label">الإجمالي</span>: <span id="cart-total">0</span> <span id="txt-currency">دج</span></p>
-            <button id="btn-confirm-order" class="btn-add" style="padding: 15px;" onclick="showOrderForm()">تأكيد المشتريات ✅</button>
-            <div id="order-details-form" style="display:none; margin-top:15px; background:var(--light-pink-bg); padding:15px; border-radius:15px;">
-                <input type="text" id="cust-name" placeholder="الاسم الكامل">
-                <input type="text" id="cust-address" placeholder="العنوان">
-                <input type="tel" id="cust-phone" placeholder="رقم الهاتف (10 أرقام)" maxlength="10">
-                <div class="contact-btns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-                    <button class="btn-contact bg-insta" style="background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color:white; border:none; padding:10px; border-radius:20px; cursor:pointer;" onclick="processOrder('insta')">Instagram</button>
-                    <button class="btn-contact bg-wa" style="background: #25D366; color:white; border:none; padding:10px; border-radius:20px; cursor:pointer;" onclick="processOrder('wa')">WhatsApp</button>
-                </div>
+            <p>الإجمالي: <span id="cart-total">0</span> دج</p>
+            <button onclick="showOrderForm()" class="btn-add">تأكيد الطلب</button>
+            <div id="order-details-form" style="display:none; margin-top:10px;">
+                <input type="text" id="cust-name" placeholder="الاسم" style="width:100%; margin-bottom:5px; padding:8px;">
+                <input type="text" id="cust-address" placeholder="العنوان" style="width:100%; margin-bottom:5px; padding:8px;">
+                <button onclick="processOrder('wa')" class="btn-add" style="background:#25D366;">WhatsApp</button>
             </div>
         </div>
     </div>
 
     <div class="products-grid" id="grid"></div>
 
-    <div class="image-viewer" id="image-viewer" onclick="this.style.display='none'">
-        <span class="close-viewer">&times;</span>
-        <img id="full-img" src="">
-    </div>
+    <div class="image-viewer" id="image-viewer" onclick="this.style.display='none'"><img id="full-img" src=""></div>
 
     <div class="modal-overlay" id="custom-modal">
         <div class="modal-card">
-            <div id="modal-icon" style="font-size: 3rem; margin-bottom: 10px;"></div>
             <h2 id="modal-title"></h2>
             <p id="modal-text"></p>
-            <button class="modal-btn" id="modal-action-btn">OK</button>
+            <button class="modal-btn" onclick="document.getElementById('custom-modal').style.display='none'">OK</button>
         </div>
     </div>
 
     <script>
         const WHATSAPP_NUM = "213557764143";
-        const INSTA_USER = "ch_lingerie20";
         let currentLang = 'ar';
         let cart = {};
 
-        const translations = {
-            ar: {
-                cartTitle: "سلة المشتريات", total: "الإجمالي", currency: "دج", confirm: "تأكيد المشتريات ✅",
-                namePh: "الاسم الكامل (إجباري)", addrPh: "العنوان بالتفصيل (إجباري)", phonePh: "رقم الهاتف (اختياري - 10 أرقام)",
-                addBtn: "أضيفي للسلة", errTitle: "بيانات ناقصة!", errMsg: "يرجى ملء الاسم والعنوان.",
-                phoneErr: "رقم الهاتف يجب أن يكون 10 أرقام.", successTitle: "تم النسخ! ✨",
-                successMsg: "تم نسخ طلبكِ، يرجى عمل 'لصق' في المحادثة.", ok: "حسناً"
-            },
-            fr: {
-                cartTitle: "Mon Panier", total: "Total", currency: "DZD", confirm: "Confirmer ✅",
-                namePh: "Nom complet", addrPh: "Adresse détaillée", phonePh: "Téléphone (10 chiffres)",
-                addBtn: "Ajouter", errTitle: "Erreur!", errMsg: "Veuillez remplir le nom et l'adresse.",
-                phoneErr: "Le numéro doit avoir 10 chiffres.", successTitle: "Copié! ✨",
-                successMsg: "Commande copiée. Faites 'Coller' dans le chat.", ok: "OK"
-            }
-        };
-
         const products = [
-            { id: 1, img: "1",  ar: "خمار موديل 1", fr: "Hijab 1", price: 3500 },
-            { id: 2, img: "6",  ar: "خمار موديل 2", fr: "Hijab 2", price: 2500 },
-            { id: 3, img: "9",  ar: "حجاب فلة",    fr: "Hijab Fella", price: 2500 },
+            { id: 1, img: "1", ar: "خمار موديل 1", fr: "Hijab 1", price: 3500 },
+            { id: 2, img: "6", ar: "خمار موديل 2", fr: "Hijab 2", price: 2500 },
+            { id: 3, img: "9", ar: "حجاب فلة", fr: "Hijab Fella", price: 2500 },
             { id: 4, img: "10", ar: "بيجامة شتوية", fr: "Pyjama 1", price: 2200 },
             { id: 5, img: "11", ar: "بيجامة موديل 2", fr: "Pyjama 2", price: 1000 },
             { id: 6, img: "12", ar: "بيجامة موديل 3", fr: "Pyjama 3", price: 1000 },
-            { id: 7, img: "13", ar: "ROBE HIJAB",   fr: "Robe Hijab", price: 4200 },
+            { id: 7, img: "13", ar: "ROBE HIJAB", fr: "Robe Hijab", price: 4200 },
             { id: 8, img: "14", ar: "بيجامة موديل 4", fr: "Pyjama 4", price: 1000 },
             { id: 9, img: "15", ar: "بيجامة موديل 5", fr: "Pyjama 5", price: 1000 }
         ];
-
-        function changeLang(lang) {
-            currentLang = lang;
-            const html = document.getElementById('main-html');
-            html.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            const t = translations[lang];
-            document.getElementById('txt-cart-title').innerText = t.cartTitle;
-            document.getElementById('txt-total-label').innerText = t.total;
-            document.getElementById('txt-currency').innerText = t.currency;
-            document.getElementById('btn-confirm-order').innerText = t.confirm;
-            document.getElementById('cust-name').placeholder = t.namePh;
-            document.getElementById('cust-address').placeholder = t.addrPh;
-            document.getElementById('cust-phone').placeholder = t.phonePh;
-            toggleLangMenu(); render(); updateUI();
-        }
 
         function render() {
             const grid = document.getElementById('grid');
             grid.innerHTML = products.map(p => `
                 <div class="product-card">
-                    <img src="${p.img}.jpg" onclick="zoomImage('${p.img}.jpg')" onerror="this.src='https://via.placeholder.com/200x300'">
+                    <img src="${p.img}.jpg" onclick="zoomImage('${p.img}.jpg')">
                     <h3>${currentLang === 'ar' ? p.ar : p.fr}</h3>
-                    <p style="color:var(--main-pink); font-weight:bold;">${p.price} ${translations[currentLang].currency}</p>
-                    <button class="btn-add" onclick="addToCart(${p.id})">${translations[currentLang].addBtn}</button>
+                    <p>${p.price} دج</p>
+                    <button class="btn-add" onclick="addToCart(${p.id})">أضف للسلة</button>
                 </div>
             `).join('');
         }
@@ -191,32 +138,6 @@
         function zoomImage(src) {
             document.getElementById('full-img').src = src;
             document.getElementById('image-viewer').style.display = 'flex';
-        }
-
-        function showPopup(title, text, icon, actionFn = null) {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-text').innerText = text;
-            document.getElementById('modal-icon').innerText = icon;
-            document.getElementById('modal-action-btn').innerText = translations[currentLang].ok;
-            document.getElementById('modal-action-btn').onclick = () => { document.getElementById('custom-modal').style.display = 'none'; if(actionFn) actionFn(); };
-            document.getElementById('custom-modal').style.display = 'flex';
-        }
-
-        function processOrder(platform) {
-            const n = document.getElementById('cust-name').value;
-            const a = document.getElementById('cust-address').value;
-            const p = document.getElementById('cust-phone').value;
-            const t = translations[currentLang];
-            if(!n || !a) return showPopup(t.errTitle, t.errMsg, "⚠️");
-            if(p !== "" && p.length < 10) return showPopup(t.errTitle, t.phoneErr, "📞");
-            let msg = `Commande:\n👤 ${n}\n📍 ${a}\n📞 ${p || '/'}\n\n📦 Articles:\n`;
-            for (let id in cart) msg += `- ${currentLang === 'ar' ? cart[id].ar : cart[id].fr} (x${cart[id].qty})\n`;
-            navigator.clipboard.writeText(msg).then(() => {
-                showPopup(t.successTitle, t.successMsg, "✅", () => {
-                    if(platform === 'wa') window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
-                    else { window.location.href = `instagram://user?username=${INSTA_USER}`; setTimeout(() => window.open(`https://www.instagram.com/${INSTA_USER}`), 500); }
-                });
-            });
         }
 
         function addToCart(id) {
@@ -230,16 +151,22 @@
             let total = 0, count = 0; list.innerHTML = '';
             for (let id in cart) {
                 const item = cart[id]; total += item.price * item.qty; count += item.qty;
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:5px 0;"><span>${currentLang === 'ar' ? item.ar : item.fr} (x${item.qty})</span> <button onclick="delete cart[${id}]; updateUI();" style="color:red; border:none; background:none; cursor:pointer;">×</button></div>`;
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${currentLang === 'ar' ? item.ar : item.fr} x${item.qty}</span><button onclick="delete cart[${id}]; updateUI();" style="color:red; border:none; background:none; cursor:pointer;">&times;</button></div>`;
             }
             document.getElementById('cart-total').innerText = total;
             document.getElementById('cart-count').innerText = count;
             document.getElementById('order-section').style.display = count > 0 ? 'block' : 'none';
         }
 
+        function changeLang(lang) {
+            currentLang = lang;
+            document.getElementById('main-html').dir = lang === 'ar' ? 'rtl' : 'ltr';
+            toggleLangMenu(); render();
+        }
+
         function toggleCart() { document.getElementById('cart-sidebar').classList.toggle('open'); }
         function toggleLangMenu() { const m = document.getElementById('lang-menu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
-        function showOrderForm() { document.getElementById('btn-confirm-order').style.display = 'none'; document.getElementById('order-details-form').style.display = 'block'; }
+        function showOrderForm() { document.getElementById('order-details-form').style.display = 'block'; }
         render();
     </script>
 </body>
