@@ -7,8 +7,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     <style>
         :root { --main-pink: #d95988; --soft-pink: #ffc0cb; --light-pink-bg: #fff4f7; --whatsapp: #25D366; }
-        * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { margin: 0; background-color: #fff; padding-top: 80px; }
+        
+        /* منع اختيار النصوص في الموقع بالكامل */
+        * { 
+            box-sizing: border-box; 
+            transition: 0.3s; 
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10+ */
+            user-select: none; /* Standard syntax */
+        }
+        
+        body { margin: 0; background-color: #fff; padding-top: 80px; display: flex; flex-direction: column; min-height: 100vh; }
         
         header {
             background: #fff; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
@@ -29,13 +39,19 @@
         .cart-sidebar.open { right: 0; }
         html[dir="ltr"] .cart-sidebar.open { left: 0; }
         
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 20px 5%; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; padding: 20px 5%; flex: 1; }
         .product-card { background: #fdfdfd; padding: 10px; border-radius: 15px; border: 1px solid #eee; text-align: center; }
         .product-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; cursor: pointer; }
         .btn-add { background: var(--main-pink); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
 
         .order-form-container { margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-pink-bg); }
-        .order-form-container input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #eee; border-radius: 10px; outline: none; background: #fafafa; }
+        /* السماح بالكتابة داخل المدخلات فقط */
+        .order-form-container input { 
+            width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #eee; 
+            border-radius: 10px; outline: none; background: #fafafa; 
+            -webkit-user-select: text; user-select: text; 
+        }
+        
         .platform-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-p { padding: 12px; border: none; border-radius: 20px; color: white; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
 
@@ -48,11 +64,16 @@
 
         .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 5000; backdrop-filter: blur(4px); }
         .popup-card { background: white; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 2px solid var(--light-pink-bg); }
+
+        footer {
+            padding: 20px; text-align: center; font-size: 0.75rem; color: #999; border-top: 1px solid #f5f5f5;
+            display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 20px;
+        }
+        .dev-link { color: #d95988; text-decoration: none; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+        .insta-dev-icon { width: 18px; height: 18px; vertical-align: middle; }
     </style>
 </head>
-<body>
-
-    <header>
+<body oncontextmenu="return false;"> <header>
         <div class="logo">CH Lingerie</div>
         <div class="nav-controls">
             <button class="icon-btn" onclick="toggleLang()">🌐</button>
@@ -100,7 +121,24 @@
         </div>
     </div>
 
+    <footer>
+        <span id="dev-text">للتواصل مع صانع الموقع</span>
+        <a href="https://www.instagram.com/d_bl_bn?igsh=cXZpeHplOTVodTZ6" target="_blank" class="dev-link">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" class="insta-dev-icon" alt="Instagram">
+            @d_bl_bn
+        </a>
+    </footer>
+
     <script>
+        // كود منع الاختصارات (F12, Ctrl+U, Ctrl+Shift+I)
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) return false;
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false;
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        }
+
         let lang = 'ar'; let cart = {};
         const WHATSAPP = "213557764143"; const INSTA = "ch_lingerie20";
 
@@ -109,13 +147,15 @@
                 cart: "سلة المشتريات", total: "الإجمالي", curr: "دج", name: "الاسم الكامل", addr: "العنوان بالتفصيل", 
                 phone: "رقم الهاتف (اختياري)", add: "أضيفي للسلة", err: "بيانات ناقصة!", 
                 phoneErr: "في حال كتابة رقم الهاتف، يجب أن يتكون من 10 أرقام بالضبط!", 
-                success: "تم النسخ بنجاح! ✨", done: "يرجى عمل 'لصق' في المحادثة لإرسال طلبكِ.", confirm: "تأكيد الطلبية ✅" 
+                success: "تم النسخ بنجاح! ✨", done: "يرجى عمل 'لصق' في المحادثة لإرسال طلبكِ.", confirm: "تأكيد الطلبية ✅",
+                dev: "للتواصل مع صانع الموقع"
             },
             fr: { 
                 cart: "Mon Panier", total: "Total", curr: "DZD", name: "Nom complet", addr: "Adresse détaillée", 
                 phone: "Téléphone (Optionnel)", add: "Ajouter", err: "Erreur!", 
-                phoneErr: "Le numéro doit comporter 10 chiffres (si rempli)!", 
-                success: "Copié! ✨", done: "Veuillez faire 'Coller' dans le chat.", confirm: "Confirmer la commande ✅" 
+                phoneErr: "Le رقم الهاتف doit comporter 10 chiffres!", 
+                success: "Copié! ✨", done: "Veuillez faire 'Coller' dans le chat.", confirm: "Confirmer la commande ✅",
+                dev: "Contacter le développeur"
             }
         };
 
@@ -151,6 +191,7 @@
             document.getElementById('addr').placeholder = dict[l].addr;
             document.getElementById('phone').placeholder = dict[l].phone;
             document.getElementById('btn-show-form').innerText = dict[l].confirm;
+            document.getElementById('dev-text').innerText = dict[l].dev;
             toggleLang(); render(); update();
         }
 
@@ -186,16 +227,11 @@
 
         function send(platform) {
             const n = document.getElementById('name').value, a = document.getElementById('addr').value, ph = document.getElementById('phone').value;
-            
             if(!n || !a) return openPop(dict[lang].err, dict[lang].confirm);
-            
-            // التعديل هنا: يتم الفحص فقط إذا كان هناك نص في خانة الهاتف
             if(ph.trim() !== "" && ph.length !== 10) return openPop(dict[lang].err, dict[lang].phoneErr);
-
             let m = `COMMANDE:\n👤 Client: ${n}\n📍 Adresse: ${a}\n📞 Tel: ${ph || '/'}\n\n📦 Articles:\n`;
             for(let id in cart) m += `- ${lang === 'ar' ? cart[id].ar : cart[id].fr} (x${cart[id].q})\n`;
             m += `\n💰 TOTAL: ${document.getElementById('total-price').innerText} ${dict[lang].curr}`;
-            
             navigator.clipboard.writeText(m).then(() => {
                 openPop(dict[lang].success, dict[lang].done);
                 setTimeout(() => {
