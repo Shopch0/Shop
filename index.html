@@ -42,7 +42,6 @@
         .bg-insta { background: var(--instagram); }
         .bg-wa { background: var(--whatsapp); }
 
-        /* ستايل التنبيه الجديد */
         .alert-text {
             background: #fff4f7;
             color: #d95988;
@@ -88,8 +87,8 @@
                 </div>
 
                 <div class="alert-text">
-                    ⚠️ <strong>ملاحظة لمستخدمي انستغرام:</strong><br>
-                    عند الضغط، سيتم نسخ بيانات طلبك تلقائياً. يرجى عمل <strong>"لصق" (Paste)</strong> في المحادثة عند فتح الخاص لإرسال الطلب.
+                    ⚠️ <strong>هام لمستخدمي انستغرام:</strong><br>
+                    سيتم نسخ طلبك تلقائياً. عند فتح الخاص، اضغط ضغطة مطولة في مكان الكتابة واختر <strong>"لصق" (Paste)</strong>.
                 </div>
             </div>
         </div>
@@ -98,7 +97,8 @@
     <div class="products-grid" id="grid"></div>
 
     <script>
-        const WHATSAPP_NUM = "213XXXXXXXXX"; // ضعي رقمك هنا
+        // بيانات التواصل (يرجى تعديل رقم الواتساب بالرقم الحقيقي)
+        const WHATSAPP_NUM = "213XXXXXXXXX"; 
         const INSTA_USER = "ch_lingerie20"; 
 
         const products = [
@@ -156,16 +156,16 @@
 
             if(!n || !a || !p) return alert("يرجى إكمال بياناتك أولاً.");
 
-            let msg = `طلب جديد من متجر CH_LINGERIE:\n\n`;
-            msg += `👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلبية:\n`;
-            for (let id in cart) msg += `- ${cart[id].ar} (الكمية: ${cart[id].qty})\n`;
-            msg += `\n💰 المجموع: ${document.getElementById('cart-total').innerText} دج`;
+            let msg = `طلب جديد من متجر CH_LINGERIE:\n\n👤 الاسم: ${n}\n📍 العنوان: ${a}\n📞 الهاتف: ${p}\n\n📦 الطلبية:\n`;
+            for (let id in cart) msg += `- ${cart[id].ar} (×${cart[id].qty})\n`;
+            msg += `\n💰 الإجمالي: ${document.getElementById('cart-total').innerText} دج`;
 
             if(platform === 'wa') {
                 window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
             } else {
                 navigator.clipboard.writeText(msg).then(() => {
-                    alert("✅ تم نسخ بيانات طلبك! بمجرد فتح انستغرام، اضغطي ضغطة مطولة في خانة الرسالة واختاري 'لصق' (Paste).");
+                    alert("✅ تم نسخ بيانات طلبك! بمجرد فتح انستغرام، قومي بعمل 'لصق' (Paste) في الخاص.");
+                    // هذا الرابط يفتح الدردشة المباشرة (Direct Message) فوراً
                     window.open(`https://www.instagram.com/direct/t/${INSTA_USER}`, "_blank");
                 });
             }
