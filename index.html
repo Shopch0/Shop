@@ -108,7 +108,7 @@
             ar: { 
                 cart: "سلة المشتريات", total: "الإجمالي", curr: "دج", name: "الاسم الكامل", addr: "العنوان بالتفصيل", 
                 phone: "رقم الهاتف (اختياري)", add: "أضيفي للسلة", err: "بيانات ناقصة!", 
-                phoneErr: "في حال كتابة رقم الهاتف، يجب أن يكون 10 أرقام!", 
+                phoneErr: "في حال كتابة رقم الهاتف، يجب أن يتكون من 10 أرقام بالضبط!", 
                 success: "تم النسخ بنجاح! ✨", done: "يرجى عمل 'لصق' في المحادثة لإرسال طلبكِ.", confirm: "تأكيد الطلبية ✅" 
             },
             fr: { 
@@ -187,13 +187,12 @@
         function send(platform) {
             const n = document.getElementById('name').value, a = document.getElementById('addr').value, ph = document.getElementById('phone').value;
             
-            // الاسم والعنوان إجباريان
             if(!n || !a) return openPop(dict[lang].err, dict[lang].confirm);
             
-            // رقم الهاتف اختياري: إذا كتب شيئاً يجب أن يكون 10، وإلا فلا بأس
-            if(ph.length > 0 && ph.length !== 10) return openPop(dict[lang].err, dict[lang].phoneErr);
+            // التعديل هنا: يتم الفحص فقط إذا كان هناك نص في خانة الهاتف
+            if(ph.trim() !== "" && ph.length !== 10) return openPop(dict[lang].err, dict[lang].phoneErr);
 
-            let m = `COMMANDE:\n👤 Client: ${n}\n📍 Adresse: ${a}\n📞 Tel: ${ph || 'Non fourni'}\n\n📦 Articles:\n`;
+            let m = `COMMANDE:\n👤 Client: ${n}\n📍 Adresse: ${a}\n📞 Tel: ${ph || '/'}\n\n📦 Articles:\n`;
             for(let id in cart) m += `- ${lang === 'ar' ? cart[id].ar : cart[id].fr} (x${cart[id].q})\n`;
             m += `\n💰 TOTAL: ${document.getElementById('total-price').innerText} ${dict[lang].curr}`;
             
