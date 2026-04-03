@@ -14,6 +14,7 @@
             background: #fff; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05); z-index: 1000;
         }
+        /* اللوجو سطر واحد وردي فاتح */
         .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--soft-pink); white-space: nowrap; font-style: italic; }
         
         .nav-controls { display: flex; gap: 15px; align-items: center; }
@@ -34,15 +35,16 @@
         .product-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; cursor: pointer; }
         .btn-add { background: var(--main-pink); color: white; border: none; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
 
-        /* مكان الطلب المحدث داخل السلة */
+        /* منطقة إدخال البيانات */
         .order-form-container { margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-pink-bg); }
         .order-form-container input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #eee; border-radius: 10px; outline: none; background: #fafafa; }
         .platform-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .btn-p { padding: 12px; border: none; border-radius: 20px; color: white; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
 
-        /* نافذة التكبير و Popup */
+        /* نوافذ الصور والتنبيهات */
         .full-viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 4000; }
-        .full-viewer img { max-width: 90%; max-height: 80%; border-radius: 10px; }
+        .full-viewer img { max-width: 90%; max-height: 80%; border-radius: 10px; border: 2px solid white; }
+        
         .lang-menu { position: absolute; top: 60px; left: 5%; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-radius: 10px; display: none; flex-direction: column; z-index: 1001; }
         html[dir="ltr"] .lang-menu { left: auto; right: 5%; }
         .lang-menu button { padding: 12px 25px; border: none; background: none; cursor: pointer; width: 100%; text-align: center; border-bottom: 1px solid #eee; }
@@ -76,6 +78,7 @@
             <p style="font-weight:bold;"><span id="t-total">الإجمالي</span>: <span id="total-price">0</span> <span id="t-curr">دج</span></p>
             <input type="text" id="name" placeholder="الاسم الكامل">
             <input type="text" id="addr" placeholder="العنوان بالتفصيل">
+            <input type="tel" id="phone" placeholder="رقم الهاتف (10 أرقام)" maxlength="10">
             <div class="platform-btns">
                 <button class="btn-p" style="background: linear-gradient(45deg,#f09433,#dc2743,#bc1888);" onclick="send('insta')">Instagram</button>
                 <button class="btn-p" style="background: var(--whatsapp);" onclick="send('wa')">WhatsApp</button>
@@ -94,8 +97,8 @@
         const WHATSAPP = "213557764143"; const INSTA = "ch_lingerie20";
 
         const dict = {
-            ar: { cart: "سلة المشتريات", total: "الإجمالي", curr: "دج", name: "الاسم (إجباري)", addr: "العنوان (إجباري)", add: "أضيفي للسلة", err: "بيانات ناقصة!", msg: "يرجى كتابة الاسم والعنوان.", success: "تم النسخ! ✨", done: "الصقي الطلب في المحادثة." },
-            fr: { cart: "Mon Panier", total: "Total", curr: "DZD", name: "Nom complet", addr: "Adresse", add: "Ajouter", err: "Erreur!", msg: "Nom et adresse requis.", success: "Copié! ✨", done: "Collez le message dans le chat." }
+            ar: { cart: "سلة المشتريات", total: "الإجمالي", curr: "دج", name: "الاسم الكامل", addr: "العنوان بالتفصيل", phone: "رقم الهاتف", add: "أضيفي للسلة", err: "بيانات ناقصة!", msg: "يرجى ملء الاسم والعنوان لإتمام الطلب.", success: "تم النسخ! ✨", done: "يرجى عمل 'لصق' في المحادثة لإرسال طلبكِ." },
+            fr: { cart: "Mon Panier", total: "Total", curr: "DZD", name: "Nom complet", addr: "Adresse détaillée", phone: "N° Téléphone", add: "Ajouter", err: "Données manquantes!", msg: "Veuillez remplir le nom et l'adresse.", success: "Copié! ✨", done: "Veuillez faire 'Coller' dans le chat." }
         };
 
         const prods = [
@@ -113,7 +116,7 @@
         function render() {
             document.getElementById('grid').innerHTML = prods.map(p => `
                 <div class="product-card">
-                    <img src="${p.img}.jpg" onclick="zoom('${p.img}.jpg')">
+                    <img src="${p.img}.jpg" onclick="zoom('${p.img}.jpg')" onerror="this.src='https://via.placeholder.com/200x300'">
                     <h3>${lang === 'ar' ? p.ar : p.fr}</h3>
                     <p style="color:var(--main-pink); font-weight:bold;">${p.p} ${dict[lang].curr}</p>
                     <button class="btn-add" onclick="add(${p.id})">${dict[lang].add}</button>
@@ -128,6 +131,7 @@
             document.getElementById('t-curr').innerText = dict[l].curr;
             document.getElementById('name').placeholder = dict[l].name;
             document.getElementById('addr').placeholder = dict[l].addr;
+            document.getElementById('phone').placeholder = dict[l].phone;
             toggleLang(); render(); update();
         }
 
@@ -140,9 +144,9 @@
             let list = document.getElementById('cart-list'), tot = 0, c = 0; list.innerHTML = '';
             for (let id in cart) {
                 let i = cart[id]; tot += i.p * i.q; c += i.q;
-                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.9rem;">
                     <span>${lang === 'ar' ? i.ar : i.fr} (x${i.q})</span>
-                    <button onclick="delete cart[${id}]; update();" style="color:red; border:none; background:none; cursor:pointer;">&times;</button>
+                    <button onclick="delete cart[${id}]; update();" style="color:red; border:none; background:none; cursor:pointer; font-weight:bold;">&times;</button>
                 </div>`;
             }
             document.getElementById('total-price').innerText = tot;
@@ -150,17 +154,20 @@
             document.getElementById('checkout-area').style.display = c > 0 ? 'block' : 'none';
         }
 
-        function send(p) {
-            const n = document.getElementById('name').value, a = document.getElementById('addr').value;
+        function send(platform) {
+            const n = document.getElementById('name').value, a = document.getElementById('addr').value, ph = document.getElementById('phone').value;
             if(!n || !a) return showPop(dict[lang].err, dict[lang].msg);
-            let m = `Commande:\n👤 ${n}\n📍 ${a}\n\n📦 Articles:\n`;
+            
+            let m = `COMMANDE CH_LINGERIE:\n👤 Client: ${n}\n📍 Adresse: ${a}\n📞 Tel: ${ph || '/'}\n\n📦 Articles:\n`;
             for(let id in cart) m += `- ${lang === 'ar' ? cart[id].ar : cart[id].fr} (x${cart[id].q})\n`;
+            m += `\n💰 TOTAL: ${document.getElementById('total-price').innerText} ${dict[lang].curr}`;
+
             navigator.clipboard.writeText(m).then(() => {
                 showPop(dict[lang].success, dict[lang].done);
                 setTimeout(() => {
-                    if(p === 'wa') window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(m)}`);
+                    if(platform === 'wa') window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(m)}`);
                     else window.open(`https://www.instagram.com/${INSTA}`);
-                }, 1500);
+                }, 2000);
             });
         }
 
